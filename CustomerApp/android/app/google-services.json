@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "257500464551",
+    "firebase_url": "https://online-liquor-shop-11356.firebaseio.com",
+    "project_id": "online-liquor-shop-11356",
+    "storage_bucket": "online-liquor-shop-11356.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:257500464551:android:9226e3e9c339fef021a282",
+        "android_client_info": {
+          "package_name": "com.emadhushala"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "257500464551-ta002lnepvcm93p5lpij9ef7gk8ekad8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBbGrdLpA10YUY5-Zu93CQBvZ9HokQMlBI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "257500464551-ta002lnepvcm93p5lpij9ef7gk8ekad8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
