@@ -196,14 +196,15 @@ class AddNewProductScreen extends Component {
               />
             </Card>
           ) : !this.props.profile.profile.profileVerificationDetail ||
-            !this.props.profile.profile.profileVerificationDetail.verified ||
+            this.props.profile.profile.profileVerificationDetail
+              .verification !== 'ver' ||
             !this.props.profile.profile.storeDetail ||
-            !this.props.profile.profile.storeDetail.verified ||
+            this.props.profile.profile.storeDetail.verification !== 'ver' ||
             !this.props.profile.profile.bankDetail ||
-            !this.props.profile.profile.bankDetail.verified ? (
+            this.props.profile.profile.bankDetail.verification !== 'ver' ? (
             <View>
               <Text style={{padding: 10, fontSize: 18}}>
-                Your profile verification is still pending. You can enjoy the
+                Your profile verification is still not done. You can enjoy the
                 services, once your profile is verified by us.
               </Text>
               <Text style={{padding: 10, fontSize: 18}}>

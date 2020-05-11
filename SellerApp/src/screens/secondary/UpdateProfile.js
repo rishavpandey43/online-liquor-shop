@@ -438,14 +438,15 @@ class UpdateProfileScreen extends Component {
               <Card
                 title={
                   <CardCustomTitle
-                    title="Update Your Store Detail"
+                    title="Update Your Shop Detail"
                     detail
                     onPress={() => {
                       this._toggleEditCardDisplay('storeDetailCardDisplay');
                     }}
                   />
                 }>
-                {this.props.profile.profile.storeDetail ? (
+                {this.props.profile.profile.storeDetail.verification ===
+                'pen' ? (
                   <View>
                     <Text>
                       You've filled the detail, please wait for it's
@@ -462,8 +463,8 @@ class UpdateProfileScreen extends Component {
                     <View>
                       <View style={mainStyles.formGroup}>
                         <Input
-                          label="Store Name"
-                          placeholder="Sangam General Store"
+                          label="Shop Name"
+                          placeholder="Fab Liquor Shop"
                           value={this.state.storeDetail.name}
                           onChangeText={name => {
                             this.setState({
@@ -666,7 +667,8 @@ class UpdateProfileScreen extends Component {
                     }}
                   />
                 }>
-                {this.props.profile.profile.bankDetail ? (
+                {this.props.profile.profile.bankDetail.verification ===
+                'pen' ? (
                   <View>
                     <Text>
                       You've filled the detail, please wait for it's

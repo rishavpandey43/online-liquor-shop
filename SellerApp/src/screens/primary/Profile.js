@@ -232,7 +232,7 @@ class ProfileScreen extends Component {
               <Card
                 title={
                   <CardCustomTitle
-                    title="Store Detail"
+                    title="Shop Detail"
                     type="edit"
                     detail={this.props.profile.profile.storeDetail}
                     onPress={() => {
@@ -245,7 +245,7 @@ class ProfileScreen extends Component {
                   <View style={{alignItems: 'center'}}>
                     <Text style={{margin: 10}}>No Store added</Text>
                     <Button
-                      title="Add your store"
+                      title="Add your shop"
                       type="outline"
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
@@ -265,7 +265,7 @@ class ProfileScreen extends Component {
                           size={20}
                           containerStyle={styles.marginRight}
                         />
-                        <Text style={mainStyles.labelText}>Store Name:</Text>
+                        <Text style={mainStyles.labelText}>Shop Name:</Text>
                       </View>
                       <View>
                         <Text style={mainStyles.value}>
@@ -283,7 +283,7 @@ class ProfileScreen extends Component {
                           size={20}
                           containerStyle={styles.marginRight}
                         />
-                        <Text style={mainStyles.labelText}>Store Address:</Text>
+                        <Text style={mainStyles.labelText}>Shop Address:</Text>
                       </View>
                       <View>
                         <Text style={mainStyles.value}>
