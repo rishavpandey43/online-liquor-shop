@@ -266,7 +266,8 @@ exports.updateSellerDetailController = (req, res, next) => {
         if (err) next(err);
         Seller.findOneAndUpdate(
           { _id: req.userId },
-          { $set: { [req.body.dataType]: updatedData } }
+          { $set: { [req.body.dataType]: updatedData } },
+          { new: true }
         )
           .then((seller) => {
             if (seller) {

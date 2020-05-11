@@ -5,6 +5,7 @@ import {
   orderStatus,
   paymentMode,
   verificationDocumentType,
+  verificationStatus,
 } from './constant';
 
 export const storeDataInAsync = async (key, value) => {
@@ -88,6 +89,12 @@ export const getOrderStatus = type => {
 
 export const getpaymentMode = type => {
   return paymentMode.filter(payment => payment.value === type)[0].name;
+};
+
+export const getVerificationStatus = type => {
+  return verificationStatus.filter(
+    verification => verification.value === type,
+  )[0];
 };
 
 // TODO: complete this function

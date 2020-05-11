@@ -17,7 +17,7 @@ const sellerSchema = new Schema(
     profileVerificationDetail: {
       type: { type: String, require: false },
       number: { type: Number, require: false },
-      verified: { type: Boolean, required: true },
+      verification: { type: String, required: false },
       documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
     },
     storeDetail: {
@@ -36,7 +36,7 @@ const sellerSchema = new Schema(
       gstNumber: { type: String, required: false },
       document: { type: Buffer, required: false },
       documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
-      verified: { type: Boolean, required: true },
+      verification: { type: String, required: false },
       rating: { type: Number, required: false },
     },
     bankDetail: {
@@ -45,7 +45,7 @@ const sellerSchema = new Schema(
       ifscCode: { type: String, required: false },
       branchName: { type: String, required: false },
       documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
-      verified: { type: Boolean, required: true },
+      verification: { type: String, required: false },
     },
     products: [
       {
