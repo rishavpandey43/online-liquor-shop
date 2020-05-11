@@ -1,5 +1,6 @@
 const dotenv = require("dotenv");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 
 // * configure dotenv to access environment variables
 dotenv.config();
@@ -10,6 +11,7 @@ const authy = require("authy")(process.env.TWILIO_PROD_API_KEY);
 
 const Seller = require("../models/seller.model");
 const Product = require("../models/product.model");
+const Document = require("../models/document.model");
 
 exports.requestPhoneOTPForRegister = (req, res, next) => {
   Seller.findOne({ "personalDetail.phone": req.query.phone })
@@ -241,24 +243,47 @@ exports.getSellerController = (req, res, next) => {
 };
 
 exports.updateSellerDetailController = (req, res, next) => {
-  Seller.findOneAndUpdate(
-    { _id: req.userId },
-    { $set: { [req.body.dataType]: req.body.data } },
-    { new: true }
-  )
-    .then((seller) => {
-      if (seller) {
-        res.statusCode = 200;
-        res.statusMessage = "OK";
-        res.setHeader("Content-Type", "application/json");
-        res.json({
-          seller,
-        });
-      } else {
-        let err = new Error(`Unable to update, please try again.`);
-        err.status = 501;
-        err.statusText = "Not Implemented";
-      }
+  Document.create({
+    id: req.userId,
+    document: {
+      name: req.file.originalname,
+      data: {
+        buffer: new Buffer(
+          fs.readFileSync(req.file.path).toString("base64"),
+          "base64"
+        ),
+        contentType: req.file.mimetype,
+      },
+    },
+  })
+    .then((document) => {
+      let updatedData = {
+        ...JSON.parse(req.body.data),
+        documentId: document._id,
+      };
+      // ! Now Delete the file stored in local disk Storage.
+      fs.unlink(req.file.path, (err) => {
+        if (err) next(err);
+        Seller.findOneAndUpdate(
+          { _id: req.userId },
+          { $set: { [req.body.dataType]: updatedData } }
+        )
+          .then((seller) => {
+            if (seller) {
+              res.statusCode = 200;
+              res.statusMessage = "OK";
+              res.setHeader("Content-Type", "application/json");
+              res.json({
+                seller,
+              });
+            } else {
+              let err = new Error(`Unable to update, please try again.`);
+              err.status = 501;
+              err.statusText = "Not Implemented";
+            }
+          })
+          .catch((err) => next(err));
+      });
     })
     .catch((err) => next(err));
 };

@@ -18,11 +18,13 @@ const deliveryAgentSchema = new Schema(
     profileVerificationDetail: {
       type: { type: String, require: false },
       number: { type: Number, require: false },
-      verified: { type: Boolean, required: false },
+      verified: { type: Boolean, required: true },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
     },
     vehicleDetail: {
       drivingLicence: { type: String, required: false },
       vehicleModel: { type: String, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
       verified: { type: Boolean, required: false },
     },
     bankDetail: {
@@ -30,6 +32,7 @@ const deliveryAgentSchema = new Schema(
       accountNumber: { type: Number, required: false },
       ifscCode: { type: String, required: false },
       branchName: { type: String, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
       verified: { type: Boolean, required: false },
     },
   },

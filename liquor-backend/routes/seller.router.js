@@ -1,6 +1,7 @@
 const express = require("express");
 
-const middleWares = require("../middlewares/authenticate");
+const authenticate = require("../middlewares/authenticate");
+const fileUpload = require("../middlewares/fileUpload");
 
 const sellerRouterController = require("../controllers/seller.router.controller");
 
@@ -17,25 +18,26 @@ sellerRouter
     sellerRouterController.requestPhoneOTPForLogin
   )
   .get("/login", sellerRouterController.login)
-  .get("/logout", middleWares.verifyUserToken, sellerRouterController.logout)
+  .get("/logout", authenticate.verifyUserToken, sellerRouterController.logout)
   .get(
     "/get-seller",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     sellerRouterController.getSellerController
   )
   .put(
     "/update-seller",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
+    fileUpload.upload.single("file"),
     sellerRouterController.updateSellerDetailController
   )
   .post(
     "/add-new-product",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     sellerRouterController.addNewProductController
   )
   .get(
     "/get-all-products",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     sellerRouterController.getAllProductsController
   );
 

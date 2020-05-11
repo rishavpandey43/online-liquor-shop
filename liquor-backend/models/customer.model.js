@@ -14,6 +14,12 @@ const customerSchema = new Schema(
       phone: { type: String, required: true },
       authyId: { type: String, required: false },
     },
+    profileVerificationDetail: {
+      type: { type: String, require: false },
+      number: { type: Number, require: false },
+      verified: { type: Boolean, required: true },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
+    },
     cart: {
       storeId: { type: mongoose.Schema.Types.ObjectId },
       products: [

@@ -18,10 +18,7 @@ const sellerSchema = new Schema(
       type: { type: String, require: false },
       number: { type: Number, require: false },
       verified: { type: Boolean, required: true },
-      document: {
-        name: { type: String, require: false },
-        data: { data: Buffer, contentType: String },
-      },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
     },
     storeDetail: {
       name: { type: String, required: false },
@@ -38,6 +35,7 @@ const sellerSchema = new Schema(
       panCard: { type: String, required: false },
       gstNumber: { type: String, required: false },
       document: { type: Buffer, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
       verified: { type: Boolean, required: true },
       rating: { type: Number, required: false },
     },
@@ -46,6 +44,7 @@ const sellerSchema = new Schema(
       accountNumber: { type: Number, required: false },
       ifscCode: { type: String, required: false },
       branchName: { type: String, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
       verified: { type: Boolean, required: true },
     },
     products: [

@@ -39,7 +39,7 @@ class UpdateProfileScreen extends Component {
     super(props);
     this.state = {
       personalDetailCardDisplay: false,
-      profileVerificationDetailCardDisplay: true,
+      profileVerificationDetailCardDisplay: false,
       storeDetailCardDisplay: false,
       bankDetailCardDisplay: false,
       profileVerificationDetail: {
@@ -47,6 +47,7 @@ class UpdateProfileScreen extends Component {
         number: '',
         document: {
           name: '',
+          type: '',
           uri: '',
         },
       },
@@ -62,6 +63,7 @@ class UpdateProfileScreen extends Component {
         gstNumber: '',
         document: {
           name: '',
+          type: '',
           uri: '',
         },
       },
@@ -72,6 +74,7 @@ class UpdateProfileScreen extends Component {
         branchName: '',
         document: {
           name: '',
+          type: '',
           uri: '',
         },
       },
@@ -93,6 +96,7 @@ class UpdateProfileScreen extends Component {
           number: '',
           document: {
             name: '',
+            type: '',
             uri: '',
           },
         },
@@ -108,6 +112,7 @@ class UpdateProfileScreen extends Component {
           gstNumber: '',
           document: {
             name: '',
+            type: '',
             uri: '',
           },
         },
@@ -118,6 +123,7 @@ class UpdateProfileScreen extends Component {
           branchName: '',
           document: {
             name: '',
+            type: '',
             uri: '',
           },
         },
@@ -129,7 +135,6 @@ class UpdateProfileScreen extends Component {
     this.setState({[target]: !this.state[target]});
   };
 
-  // TODO: Implement file upload functionality
   _uploadDocument = async type => {
     try {
       const result = await DocumentPicker.pick({
@@ -140,6 +145,7 @@ class UpdateProfileScreen extends Component {
           ...this.state[type],
           document: {
             name: result.name,
+            type: result.type,
             uri: result.uri,
           },
         },
@@ -173,19 +179,27 @@ class UpdateProfileScreen extends Component {
       Alert.alert('Input Invalid', 'Please fill all the details to continue.');
       return;
     } else {
-      let data =
+      let data = {};
+
+      for (const key in tempData) {
+        if (key != 'document') {
+          data[key] = tempData[key];
+        }
+      }
+      data =
         detailType !== 'personalDetail'
           ? {
-              ...tempData,
+              ...data,
               verified: false,
             }
           : {
-              ...tempData,
+              ...data,
             };
       this.props.updateProfileFetch(
         this.props.auth.authToken,
         data,
         detailType,
+        tempData.document,
       );
     }
   };
@@ -383,6 +397,7 @@ class UpdateProfileScreen extends Component {
                                   number: '',
                                   document: {
                                     name: '',
+                                    type: '',
                                     uri: '',
                                   },
                                 },
@@ -544,19 +559,30 @@ class UpdateProfileScreen extends Component {
                       />
                     </View>
                     <View style={mainStyles.formGroup}>
-                      <Input
-                        label="GST Number"
-                        placeholder="36ARVPSXXXXF1ZF"
-                        value={this.state.storeDetail.gstNumber}
-                        onChangeText={gstNumber => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              gstNumber,
-                            },
-                          });
-                        }}
-                      />
+                      <Text
+                        style={
+                          mainStyles.formLabel
+                        }>{`Enter scanned documents of shop in pdf format`}</Text>
+                      <View style={mainStyles.row}>
+                        <View style={mainStyles.col6}>
+                          <Button
+                            title="Choose file"
+                            titleStyle={{color: variables.mainThemeColor}}
+                            type="clear"
+                            onPress={this._uploadDocument.bind(
+                              null,
+                              'storeDetail',
+                            )}
+                          />
+                        </View>
+                        <View
+                          style={(mainStyles.col6, {justifyContent: 'center'})}>
+                          <Text>
+                            {this.state.storeDetail.document.name ||
+                              'No file choosen'}
+                          </Text>
+                        </View>
+                      </View>
                     </View>
                   </View>
                   <View>
@@ -580,10 +606,11 @@ class UpdateProfileScreen extends Component {
                                 },
                                 panCard: '',
                                 gstNumber: '',
-                                // document: {
-                                //   name: '',
-                                //   uri: '',
-                                // },
+                                document: {
+                                  name: '',
+                                  type: '',
+                                  uri: '',
+                                },
                               },
                             });
                           }}
@@ -687,6 +714,33 @@ class UpdateProfileScreen extends Component {
                         }}
                       />
                     </View>
+
+                    <View style={mainStyles.formGroup}>
+                      <Text
+                        style={
+                          mainStyles.formLabel
+                        }>{`Enter scanned documents of shop in pdf format`}</Text>
+                      <View style={mainStyles.row}>
+                        <View style={mainStyles.col6}>
+                          <Button
+                            title="Choose file"
+                            titleStyle={{color: variables.mainThemeColor}}
+                            type="clear"
+                            onPress={this._uploadDocument.bind(
+                              null,
+                              'bankDetail',
+                            )}
+                          />
+                        </View>
+                        <View
+                          style={(mainStyles.col6, {justifyContent: 'center'})}>
+                          <Text>
+                            {this.state.bankDetail.document.name ||
+                              'No file choosen'}
+                          </Text>
+                        </View>
+                      </View>
+                    </View>
                   </View>
                   <View>
                     <View style={[mainStyles.row, {marginBottom: 20}]}>
@@ -699,11 +753,14 @@ class UpdateProfileScreen extends Component {
                           onPress={() => {
                             this.setState({
                               bankDetailCardDisplay: false,
-                              bankDetail: {
+                              name: '',
+                              accountNumber: '',
+                              ifscCode: '',
+                              branchName: '',
+                              document: {
                                 name: '',
-                                accountNumber: '',
-                                ifscCode: '',
-                                branchName: '',
+                                type: '',
+                                uri: '',
                               },
                             });
                           }}
