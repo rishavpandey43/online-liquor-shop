@@ -227,7 +227,23 @@ class HomeScreen extends Component {
               }}
             />
           }>
-          {this.props.sellers.fetchingSellers ? (
+          {this.props.profile.profile && !this.props.profile.profile.address ? (
+            <Card title="Alert" containerStyle={{alignItems: 'center'}}>
+              <Text style={{marginBottom: 20, fontSize: 20, color: 'red'}}>
+                You haven't added your adddress, update your adddress to
+                continue
+              </Text>
+              <Button
+                title="Update now"
+                type="outline"
+                titleStyle={{color: variables.mainThemeColor}}
+                buttonStyle={mainStyles.outlineBtn}
+                onPress={() => {
+                  this.props.navigation.navigate('update-profile-screen');
+                }}
+              />
+            </Card>
+          ) : this.props.sellers.fetchingSellers ? (
             <View
               style={{
                 marginTop: 50,
@@ -248,23 +264,6 @@ class HomeScreen extends Component {
                 buttonStyle={mainStyles.outlineBtn}
                 onPress={() => {
                   this.props.getSellersFetch(this.props.auth.authToken);
-                }}
-              />
-            </Card>
-          ) : this.props.profile.profile &&
-            !this.props.profile.profile.address ? (
-            <Card title="Alert" containerStyle={{alignItems: 'center'}}>
-              <Text style={{marginBottom: 20, fontSize: 20, color: 'red'}}>
-                You haven't added your adddress, update your adddress to
-                continue
-              </Text>
-              <Button
-                title="Update now"
-                type="outline"
-                titleStyle={{color: variables.mainThemeColor}}
-                buttonStyle={mainStyles.outlineBtn}
-                onPress={() => {
-                  this.props.navigation.navigate('update-profile-screen');
                 }}
               />
             </Card>

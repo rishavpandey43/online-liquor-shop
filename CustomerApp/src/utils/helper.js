@@ -2,7 +2,14 @@
 import AsyncStorage from '@react-native-community/async-storage';
 
 // * Import utilites
-import {addressType, categoryList, orderStatus, paymentMode} from './constant';
+import {
+  addressType,
+  categoryList,
+  orderStatus,
+  paymentMode,
+  verificationDocumentType,
+  verificationStatus,
+} from './constant';
 
 export const storeDataInAsync = async (key, value) => {
   try {
@@ -43,6 +50,20 @@ export const filterProductBySeller = (sellerId, products) => {
 export const filterOrderBySeller = (sellerId, orders) => {
   orders = orders.filter(order => order.orderedFrom === sellerId);
   return orders;
+};
+
+export const getVerificationDocumentName = documentValue => {
+  return (
+    verificationDocumentType.filter(
+      document => document.value === documentValue,
+    )[0].name || '-'
+  );
+};
+
+export const getVerificationStatus = type => {
+  return verificationStatus.filter(
+    verification => verification.value === type,
+  )[0];
 };
 
 export const obtainItemsInString = (items, i) => {

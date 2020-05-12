@@ -1,7 +1,18 @@
-// export const baseUrl = 'http://192.168.43.240:5555';
-export const baseUrl = 'https://e-samagri-backend.herokuapp.com';
+export const baseUrl = 'http://192.168.43.240:5555';
+// export const baseUrl = 'https://e-samagri-backend.herokuapp.com';
 
 export const authTokenName = 'eSamagri_customer_auth_token';
+
+export const verificationDocumentType = [
+  {
+    name: 'Aadhar Card',
+    value: 'aadhar-id',
+  },
+  {
+    name: 'Voter ID Card',
+    value: 'voter-id',
+  },
+];
 
 export const addressType = [
   {
@@ -109,6 +120,24 @@ export const orderStatus = [
   {
     label: 'Cancelled',
     value: 'can',
+    color: 'red',
+  },
+];
+
+export const verificationStatus = [
+  {
+    label: 'Pending',
+    value: 'pen',
+    color: 'orange',
+  },
+  {
+    label: 'Verified',
+    value: 'ver',
+    color: 'green',
+  },
+  {
+    label: 'Rejected',
+    value: 'rej',
     color: 'red',
   },
 ];

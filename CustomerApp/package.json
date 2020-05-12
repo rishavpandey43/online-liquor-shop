@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.9.0",
+    "@react-native-community/datetimepicker": "^2.3.2",
     "@react-native-community/masked-view": "^0.1.9",
     "@react-native-firebase/app": "^6.7.1",
     "@react-native-firebase/messaging": "^6.7.1",
@@ -21,6 +22,7 @@
     "axios": "^0.19.2",
     "react": "16.11.0",
     "react-native": "0.62.2",
+    "react-native-document-picker": "^3.4.0",
     "react-native-elements": "^1.2.7",
     "react-native-form-validator": "^0.3.2",
     "react-native-gesture-handler": "^1.6.1",

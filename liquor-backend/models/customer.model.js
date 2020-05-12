@@ -15,9 +15,10 @@ const customerSchema = new Schema(
       authyId: { type: String, required: false },
     },
     profileVerificationDetail: {
+      dob: { type: Date, require: false },
       type: { type: String, require: false },
       number: { type: Number, require: false },
-      verified: { type: Boolean, required: true },
+      verification: { type: String, required: false },
       documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
     },
     cart: {
