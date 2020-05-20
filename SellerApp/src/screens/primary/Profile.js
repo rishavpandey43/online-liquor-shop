@@ -128,7 +128,7 @@ class ProfileScreen extends Component {
                       this.props.profile.profile.profileVerificationDetail
                     }
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -144,7 +144,7 @@ class ProfileScreen extends Component {
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>
@@ -236,7 +236,7 @@ class ProfileScreen extends Component {
                     type="edit"
                     detail={this.props.profile.profile.storeDetail}
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -250,7 +250,7 @@ class ProfileScreen extends Component {
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>
@@ -364,7 +364,7 @@ class ProfileScreen extends Component {
                     type="edit"
                     detail={this.props.profile.profile.bankDetail}
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -378,7 +378,7 @@ class ProfileScreen extends Component {
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>

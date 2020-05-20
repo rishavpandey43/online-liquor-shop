@@ -76,6 +76,12 @@ export const getVerificationDocumentName = documentValue => {
   );
 };
 
+export const getVerificationStatus = type => {
+  return verificationStatus.filter(
+    verification => verification.value === type,
+  )[0];
+};
+
 export const getCategoryName = categoryValue => {
   return (
     categoryList.filter(category => category.value === categoryValue)[0]
@@ -89,12 +95,6 @@ export const getOrderStatus = type => {
 
 export const getpaymentMode = type => {
   return paymentMode.filter(payment => payment.value === type)[0].name;
-};
-
-export const getVerificationStatus = type => {
-  return verificationStatus.filter(
-    verification => verification.value === type,
-  )[0];
 };
 
 // TODO: complete this function

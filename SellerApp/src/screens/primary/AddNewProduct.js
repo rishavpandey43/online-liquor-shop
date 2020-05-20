@@ -39,17 +39,12 @@ import * as ProductsActions from '../../store/actions/creators/ProductsActions';
 import * as helper from '../../utils/helper';
 import {baseUrl, categoryList} from '../../utils/constant';
 
-const sellerId1 = '5e9fb135233b5b03d51de35b';
-const sellerId2 = '5e9fb291df5cf41033ca39e0';
-const sellerId3 = '5e9fb2a3df5cf41033ca39e1';
-
 class AddNewProductScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
       product: {
         name: '',
-        category: '',
         type: 'packet',
         brand: '',
         variants: [
@@ -216,7 +211,7 @@ class AddNewProductScreen extends Component {
               <View style={mainStyles.formGroup}>
                 <Input
                   label="Product Name:"
-                  placeholder="Kurkure Masala Munch"
+                  placeholder="Kingfisher Draught Beer"
                   value={this.state.product.name}
                   onChangeText={name => {
                     this.setState({
@@ -263,56 +258,6 @@ class AddNewProductScreen extends Component {
                     items={categoryList}
                     placeholder={{}}
                   />
-                </View>
-              </View>
-
-              <View style={mainStyles.formGroup}>
-                <Text style={mainStyles.formLabel}>Category:</Text>
-                <View style={{flexDirection: 'row'}}>
-                  <View style={mainStyles.col6}>
-                    <CheckBox
-                      containerStyle={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                      }}
-                      center
-                      title="Loose"
-                      checkedIcon="dot-circle-o"
-                      uncheckedIcon="circle-o"
-                      checkedColor={variables.mainThemeColor}
-                      checked={this.state.product.type === 'loose'}
-                      onPress={() => {
-                        this.setState({
-                          product: {
-                            ...this.state.product,
-                            type: 'loose',
-                          },
-                        });
-                      }}
-                    />
-                  </View>
-                  <View style={mainStyles.col6}>
-                    <CheckBox
-                      containerStyle={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                      }}
-                      center
-                      title="Packet"
-                      checkedIcon="dot-circle-o"
-                      uncheckedIcon="circle-o"
-                      checkedColor={variables.mainThemeColor}
-                      checked={this.state.product.type === 'packet'}
-                      onPress={() => {
-                        this.setState({
-                          product: {
-                            ...this.state.product,
-                            type: 'packet',
-                          },
-                        });
-                      }}
-                    />
-                  </View>
                 </View>
               </View>
 
@@ -373,7 +318,7 @@ class AddNewProductScreen extends Component {
                             <View style={mainStyles.col7}>
                               <Input
                                 label="Value"
-                                placeholder="500 gm or 1 pc"
+                                placeholder="100 ml or 1 l"
                                 value={this.state.product.variants[index].value}
                                 onChangeText={value => {
                                   let variants = [
