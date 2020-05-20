@@ -282,50 +282,76 @@ exports.getAllSellersController = (req, res, next) => {
 };
 
 exports.updateCustomerDetailController = (req, res, next) => {
-  Document.create({
-    id: req.userId,
-    document: {
-      name: req.file.originalname,
-      data: {
-        buffer: new Buffer(
-          fs.readFileSync(req.file.path).toString("base64"),
-          "base64"
-        ),
-        contentType: req.file.mimetype,
+  if (req.file) {
+    Document.create({
+      id: req.userId,
+      document: {
+        name: req.file.originalname,
+        data: {
+          buffer: new Buffer(
+            fs.readFileSync(req.file.path).toString("base64"),
+            "base64"
+          ),
+          contentType: req.file.mimetype,
+        },
       },
-    },
-  })
-    .then((document) => {
-      let updatedData = {
-        ...JSON.parse(req.body.data),
-        documentId: document._id,
-      };
-      // ! Now Delete the file stored in local disk Storage.
-      fs.unlink(req.file.path, (err) => {
-        if (err) next(err);
-        Customer.findOneAndUpdate(
-          { _id: req.userId },
-          { $set: { [req.body.dataType]: updatedData } },
-          { new: true }
-        )
-          .then((customer) => {
-            if (customer) {
-              res.statusCode = 200;
-              res.statusMessage = "OK";
-              res.setHeader("Content-Type", "application/json");
-              res.json({
-                customer,
-              });
-            } else {
-              let err = new Error(`Unable to update, please try again.`);
-              err.status = 501;
-              err.statusText = "Not Implemented";
-            }
-          })
-          .catch((err) => next(err));
-      });
     })
-    .catch((err) => next(err));
+      .then((document) => {
+        let updatedData = {
+          ...JSON.parse(req.body.data),
+          documentId: document._id,
+        };
+        // ! Now Delete the file stored in local disk Storage.
+        fs.unlink(req.file.path, (err) => {
+          if (err) next(err);
+          Customer.findOneAndUpdate(
+            { _id: req.userId },
+            { $set: { [req.body.dataType]: updatedData } },
+            { new: true }
+          )
+            .then((customer) => {
+              if (customer) {
+                res.statusCode = 200;
+                res.statusMessage = "OK";
+                res.setHeader("Content-Type", "application/json");
+                res.json({
+                  customer,
+                });
+              } else {
+                let err = new Error(`Unable to update, please try again.`);
+                err.status = 501;
+                err.statusText = "Not Implemented";
+              }
+            })
+            .catch((err) => next(err));
+        });
+      })
+      .catch((err) => next(err));
+  } else {
+    let updatedData = {
+      ...JSON.parse(req.body.data),
+    };
+    Customer.findOneAndUpdate(
+      { _id: req.userId },
+      { $set: { [req.body.dataType]: updatedData } },
+      { new: true }
+    )
+      .then((customer) => {
+        if (customer) {
+          res.statusCode = 200;
+          res.statusMessage = "OK";
+          res.setHeader("Content-Type", "application/json");
+          res.json({
+            customer,
+          });
+        } else {
+          let err = new Error(`Unable to update, please try again.`);
+          err.status = 501;
+          err.statusText = "Not Implemented";
+        }
+      })
+      .catch((err) => next(err));
+  }
 };
 
 exports.getCartController = (req, res, next) => {
