@@ -227,7 +227,37 @@ class HomeScreen extends Component {
               }}
             />
           }>
-          {this.props.profile.profile && !this.props.profile.profile.address ? (
+          {this.props.profile.profile &&
+          this.props.profile.profile.profileVerificationDetail.verification !=
+            'ver' ? (
+            <Card title="Alert" containerStyle={{alignItems: 'center'}}>
+              {this.props.profile.profile.profileVerificationDetail
+                .verification == 'pen' ? (
+                <Text style={{marginBottom: 20, fontSize: 20, color: 'orange'}}>
+                  Your profile verification is still under process, please wait.
+                </Text>
+              ) : (
+                <Text style={{marginBottom: 20, fontSize: 20, color: 'red'}}>
+                  Your profile verification has been rejected, please update the
+                  detail to enjoy the services.
+                </Text>
+              )}
+
+              {this.props.profile.profile.profileVerificationDetail
+                .verification == 'rej' ? (
+                <Button
+                  title="Update now"
+                  type="outline"
+                  titleStyle={{color: variables.mainThemeColor}}
+                  buttonStyle={mainStyles.outlineBtn}
+                  onPress={() => {
+                    this.props.navigation.navigate('update-profile-screen');
+                  }}
+                />
+              ) : null}
+            </Card>
+          ) : this.props.profile.profile &&
+            !this.props.profile.profile.address ? (
             <Card title="Alert" containerStyle={{alignItems: 'center'}}>
               <Text style={{marginBottom: 20, fontSize: 20, color: 'red'}}>
                 You haven't added your adddress, update your adddress to
@@ -271,7 +301,7 @@ class HomeScreen extends Component {
             <View style={[mainStyles.container, {marginBottom: 100}]}>
               <View>
                 <SearchBar
-                  placeholder="Search for stores..."
+                  placeholder="Search for shops..."
                   onChangeText={search => {
                     this.setState({
                       search,
@@ -287,7 +317,7 @@ class HomeScreen extends Component {
                 />
               </View>
               <View style={{margin: 10}}>
-                <Text h4>All stores near you</Text>
+                <Text h4>All shops near you</Text>
                 {this.props.sellers.sellers.length === 0 ? (
                   <View style={{margin: 15, marginTop: 30}}>
                     <Text style={{fontSize: 18}}>

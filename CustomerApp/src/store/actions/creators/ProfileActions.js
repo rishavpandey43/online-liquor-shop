@@ -6,6 +6,7 @@ import {ToastAndroid} from 'react-native';
 import * as actionTypes from '../types/actionTypes';
 
 // * Import utilites
+import {getSellersFetch} from './HomeActions';
 import {baseUrl} from '../../../utils/constant';
 
 export const getProfileRequest = () => {
@@ -81,27 +82,31 @@ export const updateProfileFetch = (
   const newData = new FormData();
   newData.append('dataType', dataType);
   newData.append('data', JSON.stringify(data));
-  newData.append('file', {
-    uri: document.uri,
-    type: document.type,
-    name: document.name,
-  });
+  if (document) {
+    newData.append('file', {
+      uri: document.uri,
+      type: document.type,
+      name: document.name,
+    });
+  }
   dispatch(updateProfileRequest());
   axios
     .put(baseUrl + '/customer/update-customer', newData, {
       headers: {
-        'Content-Type': 'multipart/form-data',
+        'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
       },
     })
     .then(res => {
       dispatch(updateProfileSuccess({profile: {...res.data.customer}}));
       ToastAndroid.show(
-        'Your details has been updated succesfully, You can go back to your profile',
+        'Your profile detail has been updated succesfully, please back to your profile',
         ToastAndroid.LONG,
       );
+      dispatch(getSellersFetch(token));
     })
     .catch(err => {
+      console.log(err);
       dispatch(
         updateProfileFailure({
           message: err.response

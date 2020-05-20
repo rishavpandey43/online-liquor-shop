@@ -42,7 +42,7 @@ class UpdateProfileScreen extends Component {
     super(props);
     this.state = {
       showDateTimePicker: false,
-      profileVerificationDetailCardDisplay: true,
+      profileVerificationDetailCardDisplay: false,
       addressCardDisplay: false,
       profileVerificationDetail: {
         dob: new Date(),
@@ -63,6 +63,36 @@ class UpdateProfileScreen extends Component {
       },
     };
   }
+
+  componentDidUpdate = prevProps => {
+    if (
+      prevProps.profile.profile.updatedAt !=
+      this.props.profile.profile.updatedAt
+    ) {
+      this.setState({
+        showDateTimePicker: false,
+        profileVerificationDetailCardDisplay: false,
+        addressCardDisplay: false,
+        profileVerificationDetail: {
+          dob: new Date(),
+          type: 'aadhar-id',
+          number: '',
+          document: {
+            name: '',
+            type: '',
+            uri: '',
+          },
+        },
+        address: {
+          street: '',
+          landmark: '',
+          city: '',
+          pincode: '',
+          type: 'home',
+        },
+      });
+    }
+  };
 
   _toggleEditCardDisplay = target => {
     this.setState({[target]: !this.state[target]});
@@ -384,6 +414,7 @@ class UpdateProfileScreen extends Component {
                                 this.setState({
                                   profileVerificationDetailCardDisplay: false,
                                   profileVerificationDetail: {
+                                    dob: new Date(),
                                     type: 'aadhar-id',
                                     number: '',
                                     document: {
