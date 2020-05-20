@@ -1,5 +1,5 @@
-export const baseUrl = 'http://192.168.43.240:5555';
-// export const baseUrl = 'https://e-madhushala-backend.herokuapp.com';
+// export const baseUrl = 'http://192.168.43.240:5555';
+export const baseUrl = 'https://e-madhushala-backend.herokuapp.com';
 
 export const authTokenName = 'eMadhushala_seller_auth_token';
 

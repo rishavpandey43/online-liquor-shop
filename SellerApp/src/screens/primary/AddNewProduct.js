@@ -264,7 +264,7 @@ class AddNewProductScreen extends Component {
               <View style={mainStyles.formGroup}>
                 <Input
                   label="Brand:"
-                  placeholder="Pepsico, Nestle, write - if brand"
+                  placeholder="McDowells, Kingfisher, Chivas Regal"
                   value={this.state.product.brand}
                   onChangeText={brand => {
                     this.setState({
