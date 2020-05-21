@@ -102,6 +102,7 @@ export const updateProfileFetch = (
       );
     })
     .catch(err => {
+      console.log(err.response);
       dispatch(
         updateProfileFailure({
           message: err.response

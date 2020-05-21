@@ -268,7 +268,8 @@ class UpdateProfileScreen extends Component {
                     }}
                   />
                 }>
-                {this.props.profile.profile.profileVerificationDetail
+                {this.props.profile.profile.profileVerificationDetail &&
+                this.props.profile.profile.profileVerificationDetail
                   .verification === 'pen' ? (
                   <View>
                     <Text>
@@ -445,8 +446,9 @@ class UpdateProfileScreen extends Component {
                     }}
                   />
                 }>
-                {this.props.profile.profile.storeDetail.verification ===
-                'pen' ? (
+                {this.props.profile.profile.storeDetail &&
+                this.props.profile.profile.storeDetail.verification ===
+                  'pen' ? (
                   <View>
                     <Text>
                       You've filled the detail, please wait for it's
@@ -580,10 +582,9 @@ class UpdateProfileScreen extends Component {
                         />
                       </View>
                       <View style={mainStyles.formGroup}>
-                        <Text
-                          style={
-                            mainStyles.formLabel
-                          }>{`Enter scanned documents of shop in pdf format`}</Text>
+                        <Text style={mainStyles.formLabel}>
+                          Enter scanned documents of shop in pdf format
+                        </Text>
                         <View style={mainStyles.row}>
                           <View style={mainStyles.col6}>
                             <Button
@@ -667,8 +668,8 @@ class UpdateProfileScreen extends Component {
                     }}
                   />
                 }>
-                {this.props.profile.profile.bankDetail.verification ===
-                'pen' ? (
+                {this.props.profile.profile.bankDetail &&
+                this.props.profile.profile.bankDetail.verification === 'pen' ? (
                   <View>
                     <Text>
                       You've filled the detail, please wait for it's
@@ -749,10 +750,9 @@ class UpdateProfileScreen extends Component {
                       </View>
 
                       <View style={mainStyles.formGroup}>
-                        <Text
-                          style={
-                            mainStyles.formLabel
-                          }>{`Enter scanned documents of shop in pdf format`}</Text>
+                        <Text style={mainStyles.formLabel}>
+                          Enter scanned documents of bank detail in pdf format
+                        </Text>
                         <View style={mainStyles.row}>
                           <View style={mainStyles.col6}>
                             <Button
