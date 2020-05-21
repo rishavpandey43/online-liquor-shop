@@ -1,35 +1,35 @@
-const dotenv = require("dotenv");
-const jwt = require("jsonwebtoken");
-const fs = require("fs");
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // * configure dotenv to access environment variables
 dotenv.config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // * configure and add AUTHY module
-const authy = require("authy")(process.env.TWILIO_PROD_API_KEY);
+const authy = require('authy')(process.env.TWILIO_PROD_API_KEY);
 
-const Seller = require("../models/seller.model");
-const Product = require("../models/product.model");
-const Document = require("../models/document.model");
+const Seller = require('../models/seller.model');
+const Product = require('../models/product.model');
+const Document = require('../models/document.model');
 
 exports.requestPhoneOTPForRegister = (req, res, next) => {
-  Seller.findOne({ "personalDetail.phone": req.query.phone })
+  Seller.findOne({ 'personalDetail.phone': req.query.phone })
     .then((seller) => {
       if (seller) {
         let err = new Error(`You're already registered.`);
         err.status = 409;
-        err.statusText = "Conflict";
+        err.statusText = 'Conflict';
         next(err);
       } else {
-        authy.register_user("seller@demo.com", req.query.phone, "91", function (
+        authy.register_user('seller@demo.com', req.query.phone, '91', function (
           error,
           response
         ) {
           if (error) {
             let err = new Error(`Internal Server Error`);
             err.status = 500;
-            err.statusText = "Internal Server Error";
+            err.statusText = 'Internal Server Error';
             next(err);
           } else {
             authy.request_sms(response.user.id, (force = true), function (
@@ -39,12 +39,12 @@ exports.requestPhoneOTPForRegister = (req, res, next) => {
               if (otpError) {
                 let err = new Error(`Internal Server Error`);
                 err.status = 500;
-                err.statusText = "Internal Server Error";
+                err.statusText = 'Internal Server Error';
                 next(err);
               } else {
                 res.statusCode = 200;
-                res.statusText = "OK";
-                res.setHeader("Content-Type", "application/json");
+                res.statusText = 'OK';
+                res.setHeader('Content-Type', 'application/json');
                 res.json({
                   authyId: response.user.id,
                 });
@@ -58,12 +58,12 @@ exports.requestPhoneOTPForRegister = (req, res, next) => {
 };
 
 exports.register = (req, res, next) => {
-  Seller.findOne({ "personalDetail.phone": req.query.phone })
+  Seller.findOne({ 'personalDetail.phone': req.query.phone })
     .then((seller) => {
       if (seller) {
         let err = new Error(`You're already registered.`);
         err.status = 409;
-        err.statusText = "Conflict";
+        err.statusText = 'Conflict';
         next(err);
       } else {
         authy.verify(req.body.authyId, req.body.otp, function (
@@ -75,7 +75,7 @@ exports.register = (req, res, next) => {
               `OTP you entered was wrong, please enter correct otp to continue`
             );
             err.status = 400;
-            err.statusText = "Bad Request";
+            err.statusText = 'Bad Request';
             next(err);
           } else {
             Seller.create({
@@ -94,11 +94,11 @@ exports.register = (req, res, next) => {
                 let userId = seller._id;
                 // Issue JWT Token on validation
                 const token = jwt.sign({ userId }, JWT_SECRET_KEY, {
-                  expiresIn: "30d",
+                  expiresIn: '30d',
                 });
                 res.statusCode = 200;
-                res.statusText = "OK";
-                res.setHeader("Content-Type", "application/json");
+                res.statusText = 'OK';
+                res.setHeader('Content-Type', 'application/json');
                 res.json({
                   token,
                   message: "You're logged in Successfully",
@@ -113,7 +113,7 @@ exports.register = (req, res, next) => {
 };
 
 exports.requestPhoneOTPForLogin = (req, res, next) => {
-  Seller.findOne({ "personalDetail.phone": req.query.phone })
+  Seller.findOne({ 'personalDetail.phone': req.query.phone })
     .then((seller) => {
       if (seller) {
         authy.request_sms(
@@ -124,14 +124,14 @@ exports.requestPhoneOTPForLogin = (req, res, next) => {
               console.log(otpError);
               let err = new Error(`Internal Server Error`);
               err.status = 500;
-              err.statusText = "Internal Server Error";
+              err.statusText = 'Internal Server Error';
               next(err);
             } else {
               res.statusCode = 200;
-              res.statusText = "OK";
-              res.setHeader("Content-Type", "application/json");
+              res.statusText = 'OK';
+              res.setHeader('Content-Type', 'application/json');
               res.json({
-                message: "OTP sent",
+                message: 'OTP sent',
               });
             }
           }
@@ -139,7 +139,7 @@ exports.requestPhoneOTPForLogin = (req, res, next) => {
       } else {
         let err = new Error(`You're not registered yet.`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
     })
@@ -147,7 +147,7 @@ exports.requestPhoneOTPForLogin = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  Seller.findOne({ "personalDetail.phone": req.query.phone })
+  Seller.findOne({ 'personalDetail.phone': req.query.phone })
     .then((seller) => {
       if (seller) {
         authy.verify(seller.personalDetail.authyId, req.query.otp, function (
@@ -159,7 +159,7 @@ exports.login = (req, res, next) => {
               `OTP you entered was wrong, please enter correct otp to continue`
             );
             err.status = 400;
-            err.statusText = "Bad Request";
+            err.statusText = 'Bad Request';
             next(err);
           } else {
             // save FCM Device token to DB with on successfull verification
@@ -173,11 +173,11 @@ exports.login = (req, res, next) => {
                 let userId = seller._id;
                 // Issue JWT Token on validation
                 const token = jwt.sign({ userId }, JWT_SECRET_KEY, {
-                  expiresIn: "30d",
+                  expiresIn: '30d',
                 });
                 res.statusCode = 200;
-                res.statusText = "OK";
-                res.setHeader("Content-Type", "application/json");
+                res.statusText = 'OK';
+                res.setHeader('Content-Type', 'application/json');
                 res.json({
                   token,
                   message: "You're logged in Successfully",
@@ -189,7 +189,7 @@ exports.login = (req, res, next) => {
       } else {
         let err = new Error(`You're not registered yet.`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
     })
@@ -205,17 +205,17 @@ exports.logout = (req, res, next) => {
           .save()
           .then((seller) => {
             res.statusCode = 200;
-            res.statusMessage = "OK";
-            res.setHeader("Content-Type", "application/json");
+            res.statusMessage = 'OK';
+            res.setHeader('Content-Type', 'application/json');
             res.json({
-              message: "Logout successful",
+              message: 'Logout successful',
             });
           })
           .catch((err) => next(err));
       } else {
         let err = new Error(`You're not registered yet.`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
     })
@@ -227,15 +227,15 @@ exports.getSellerController = (req, res, next) => {
     .then((seller) => {
       if (seller) {
         res.statusCode = 200;
-        res.statusMessage = "OK";
-        res.setHeader("Content-Type", "application/json");
+        res.statusMessage = 'OK';
+        res.setHeader('Content-Type', 'application/json');
         res.json({
           seller,
         });
       } else {
         let err = new Error(`Internal Server Error`);
         err.status = 500;
-        err.statusText = "Internal Server Error";
+        err.statusText = 'Internal Server Error';
         next(err);
       }
     })
@@ -249,8 +249,8 @@ exports.updateSellerDetailController = (req, res, next) => {
       name: req.file.originalname,
       data: {
         buffer: new Buffer(
-          fs.readFileSync(req.file.path).toString("base64"),
-          "base64"
+          fs.readFileSync(req.file.path).toString('base64'),
+          'base64'
         ),
         contentType: req.file.mimetype,
       },
@@ -272,15 +272,15 @@ exports.updateSellerDetailController = (req, res, next) => {
           .then((seller) => {
             if (seller) {
               res.statusCode = 200;
-              res.statusMessage = "OK";
-              res.setHeader("Content-Type", "application/json");
+              res.statusMessage = 'OK';
+              res.setHeader('Content-Type', 'application/json');
               res.json({
                 seller,
               });
             } else {
               let err = new Error(`Unable to update, please try again.`);
               err.status = 501;
-              err.statusText = "Not Implemented";
+              err.statusText = 'Not Implemented';
             }
           })
           .catch((err) => next(err));
@@ -304,7 +304,7 @@ exports.addNewProductController = (req, res, next) => {
             if (seller) {
               let err = new Error(`Product already exist to your store`);
               err.status = 409;
-              err.statusText = "Conflict";
+              err.statusText = 'Conflict';
               next(err);
             } else {
               // * If seller with duplicate product is not found, find that seller again and update products to it's DB
@@ -318,10 +318,10 @@ exports.addNewProductController = (req, res, next) => {
                     .save()
                     .then((seller) => {
                       res.statusCode = 200;
-                      res.statusMessage = "OK";
-                      res.setHeader("Content-Type", "application/json");
+                      res.statusMessage = 'OK';
+                      res.setHeader('Content-Type', 'application/json');
                       res.json({
-                        successMessage: "Product has been added successfull",
+                        successMessage: 'Product has been added successfull',
                       });
                     })
                     .catch((err) => next(err));
@@ -344,7 +344,7 @@ exports.addNewProductController = (req, res, next) => {
                 if (seller) {
                   let err = new Error(`Product already added to your store`);
                   err.status = 409;
-                  err.statusText = "Conflict";
+                  err.statusText = 'Conflict';
                   next(err);
                 } else {
                   // * If seller with duplicate product is not found, find that seller again and update products to it's DB
@@ -358,11 +358,11 @@ exports.addNewProductController = (req, res, next) => {
                         .save()
                         .then((seller) => {
                           res.statusCode = 200;
-                          res.statusMessage = "OK";
-                          res.setHeader("Content-Type", "application/json");
+                          res.statusMessage = 'OK';
+                          res.setHeader('Content-Type', 'application/json');
                           res.json({
                             successMessage:
-                              "Product has been added successfull",
+                              'Product has been added successfull',
                           });
                         })
                         .catch((err) => next(err));
@@ -380,17 +380,17 @@ exports.addNewProductController = (req, res, next) => {
 
 exports.getAllProductsController = (req, res, next) => {
   Seller.findOne({ _id: req.userId })
-    .populate([{ path: "products.root", model: Product }])
+    .populate([{ path: 'products.root', model: Product }])
     .then((seller) => {
       if (!seller) {
         let err = new Error(`Seller not found with this ID`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
       res.statusCode = 200;
-      res.statusMessage = "OK";
-      res.setHeader("Content-Type", "application/json");
+      res.statusMessage = 'OK';
+      res.setHeader('Content-Type', 'application/json');
       res.json({
         products: seller.products,
       });

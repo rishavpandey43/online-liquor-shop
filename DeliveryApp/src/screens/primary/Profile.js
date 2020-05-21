@@ -12,7 +12,10 @@ import * as ProfileActions from '../../store/actions/creators/ProfileActions';
 import CardCustomTitle from '../../components/CardCustomTitle';
 
 // * Import utilites
-import {getVerificationDocumentName} from '../../utils/helper';
+import {
+  getVerificationDocumentName,
+  getVerificationStatus,
+} from '../../utils/helper';
 
 // * Import all styling stuffs
 import mainStyles from '../../styles/mainStyle';
@@ -125,7 +128,7 @@ class ProfileScreen extends Component {
                       this.props.profile.profile.profileVerificationDetail
                     }
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -141,7 +144,7 @@ class ProfileScreen extends Component {
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>
@@ -202,16 +205,23 @@ class ProfileScreen extends Component {
                           <Text h4>Status:</Text>
                         </View>
                         <View style={{flex: 1}}>
-                          {this.props.profile.profile.profileVerificationDetail
-                            .verified ? (
-                            <Text h4 style={{color: 'green', marginLeft: 10}}>
-                              Verified
+                          <View style={{flex: 1}}>
+                            <Text
+                              h4
+                              h4Style={{
+                                color: getVerificationStatus(
+                                  this.props.profile.profile
+                                    .profileVerificationDetail.verification,
+                                ).color,
+                              }}>
+                              {
+                                getVerificationStatus(
+                                  this.props.profile.profile
+                                    .profileVerificationDetail.verification,
+                                ).label
+                              }
                             </Text>
-                          ) : (
-                            <Text h4 style={{color: 'red', marginLeft: 10}}>
-                              Not Verified
-                            </Text>
-                          )}
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -219,229 +229,237 @@ class ProfileScreen extends Component {
                 )}
               </Card>
 
-              <View>
-                <Card
-                  title={
-                    <CardCustomTitle
-                      title="Vehicle Detail"
-                      type="edit"
-                      detail={this.props.profile.profile.vehicleDetail}
+              <Card
+                title={
+                  <CardCustomTitle
+                    title="Vehicle Detail"
+                    type="edit"
+                    detail={this.props.profile.profile.vehicleDetail}
+                    onPress={() => {
+                      this.props.navigation.navigate('edit-profile-screen');
+                    }}
+                  />
+                }
+                containerStyle={{borderRadius: 10}}>
+                {!this.props.profile.profile.vehicleDetail ? (
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={{margin: 10}}>No Vehicle detail added.</Text>
+                    <Button
+                      title="Add your vehicle detail now"
+                      type="outline"
+                      titleStyle={{color: variables.mainThemeColor}}
+                      buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
                         this.props.navigation.navigate('edit-profile-screen');
                       }}
                     />
-                  }
-                  containerStyle={{borderRadius: 10}}>
-                  {!this.props.profile.profile.vehicleDetail ? (
-                    <View style={{alignItems: 'center'}}>
-                      <Text style={{margin: 10}}>No Vehicle detail added.</Text>
-                      <Button
-                        title="Add your vehicle detail now"
-                        type="outline"
-                        titleStyle={{color: variables.mainThemeColor}}
-                        buttonStyle={mainStyles.outlineBtn}
-                        onPress={() => {
-                          this.props.navigation.navigate('edit-profile-screen');
-                        }}
-                      />
+                  </View>
+                ) : (
+                  <View>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="shopping-cart"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>Vehicle Model:</Text>
+                      </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {
+                            this.props.profile.profile.vehicleDetail
+                              .vehicleModel
+                          }
+                        </Text>
+                      </View>
                     </View>
-                  ) : (
-                    <View>
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.labelGroup}>
-                          <Icon
-                            name="shopping-cart"
-                            type="font-awesome"
-                            color={variables.mainThemeColor}
-                            size={20}
-                            containerStyle={styles.marginRight}
-                          />
-                          <Text style={mainStyles.labelText}>
-                            Vehicle Model:
-                          </Text>
-                        </View>
-                        <View>
-                          <Text style={mainStyles.value}>
-                            {
-                              this.props.profile.profile.vehicleDetail
-                                .vehicleModel
-                            }
-                          </Text>
-                        </View>
-                      </View>
 
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.labelGroup}>
-                          <Icon
-                            name="map-marker"
-                            type="font-awesome"
-                            color={variables.mainThemeColor}
-                            size={20}
-                            containerStyle={styles.marginRight}
-                          />
-                          <Text style={mainStyles.labelText}>
-                            Driving Licence:
-                          </Text>
-                        </View>
-                        <View>
-                          <Text style={mainStyles.value}>
-                            {
-                              this.props.profile.profile.vehicleDetail
-                                .drivingLicence
-                            }
-                          </Text>
-                        </View>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="map-marker"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>
+                          Driving Licence:
+                        </Text>
                       </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {
+                            this.props.profile.profile.vehicleDetail
+                              .drivingLicence
+                          }
+                        </Text>
+                      </View>
+                    </View>
 
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.row}>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.row}>
+                        <View style={{flex: 1}}>
+                          <Text h4>Status:</Text>
+                        </View>
+                        <View style={{flex: 1}}>
                           <View style={{flex: 1}}>
-                            <Text h4>Status:</Text>
-                          </View>
-                          <View style={{flex: 1}}>
-                            {this.props.profile.profile.vehicleDetail
-                              .verified ? (
-                              <Text h4 style={{color: 'green', marginLeft: 10}}>
-                                Verified
-                              </Text>
-                            ) : (
-                              <Text h4 style={{color: 'red', marginLeft: 10}}>
-                                Not Verified
-                              </Text>
-                            )}
+                            <Text
+                              h4
+                              h4Style={{
+                                color: getVerificationStatus(
+                                  this.props.profile.profile.vehicleDetail
+                                    .verification,
+                                ).color,
+                              }}>
+                              {
+                                getVerificationStatus(
+                                  this.props.profile.profile.vehicleDetail
+                                    .verification,
+                                ).label
+                              }
+                            </Text>
                           </View>
                         </View>
                       </View>
                     </View>
-                  )}
-                </Card>
+                  </View>
+                )}
+              </Card>
 
-                <Card
-                  title={
-                    <CardCustomTitle
-                      title="Bank Account Detail"
-                      type="edit"
-                      detail={this.props.profile.profile.bankDetail}
+              <Card
+                title={
+                  <CardCustomTitle
+                    title="Bank Account Detail"
+                    type="edit"
+                    detail={this.props.profile.profile.bankDetail}
+                    onPress={() => {
+                      this.props.navigation.navigate('update-profile-screen');
+                    }}
+                  />
+                }
+                containerStyle={{borderRadius: 10}}>
+                {!this.props.profile.profile.bankDetail ? (
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={{margin: 10}}>No Bank detail added.</Text>
+                    <Button
+                      title="Add your bank detail"
+                      type="outline"
+                      titleStyle={{color: variables.mainThemeColor}}
+                      buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
-                  }
-                  containerStyle={{borderRadius: 10}}>
-                  {!this.props.profile.profile.bankDetail ? (
-                    <View style={{alignItems: 'center'}}>
-                      <Text style={{margin: 10}}>No Bank detail added.</Text>
-                      <Button
-                        title="Add your bank detail"
-                        type="outline"
-                        titleStyle={{color: variables.mainThemeColor}}
-                        buttonStyle={mainStyles.outlineBtn}
-                        onPress={() => {
-                          this.props.navigation.navigate('edit-profile-screen');
-                        }}
-                      />
+                  </View>
+                ) : (
+                  <View>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="bank"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>Bank Name:</Text>
+                      </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {this.props.profile.profile.bankDetail.name}
+                        </Text>
+                      </View>
                     </View>
-                  ) : (
-                    <View>
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.labelGroup}>
-                          <Icon
-                            name="bank"
-                            type="font-awesome"
-                            color={variables.mainThemeColor}
-                            size={20}
-                            containerStyle={styles.marginRight}
-                          />
-                          <Text style={mainStyles.labelText}>Bank Name:</Text>
-                        </View>
-                        <View>
-                          <Text style={mainStyles.value}>
-                            {this.props.profile.profile.bankDetail.name}
-                          </Text>
-                        </View>
-                      </View>
 
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.labelGroup}>
-                          <Icon
-                            name="credit-card"
-                            type="font-awesome"
-                            color={variables.mainThemeColor}
-                            size={20}
-                            containerStyle={styles.marginRight}
-                          />
-                          <Text style={mainStyles.labelText}>
-                            Account number:
-                          </Text>
-                        </View>
-                        <View>
-                          <Text style={mainStyles.value}>
-                            {
-                              this.props.profile.profile.bankDetail
-                                .accountNumber
-                            }
-                          </Text>
-                        </View>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="credit-card"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>
+                          Account number:
+                        </Text>
                       </View>
-
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.labelGroup}>
-                          <Icon
-                            name="file-o"
-                            type="font-awesome"
-                            color={variables.mainThemeColor}
-                            size={20}
-                            containerStyle={styles.marginRight}
-                          />
-                          <Text style={mainStyles.labelText}>IFSC code:</Text>
-                        </View>
-                        <View>
-                          <Text style={mainStyles.value}>
-                            {this.props.profile.profile.bankDetail.ifscCode}
-                          </Text>
-                        </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {this.props.profile.profile.bankDetail.accountNumber}
+                        </Text>
                       </View>
+                    </View>
 
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.labelGroup}>
-                          <Icon
-                            name="file-o"
-                            type="font-awesome"
-                            color={variables.mainThemeColor}
-                            size={20}
-                            containerStyle={styles.marginRight}
-                          />
-                          <Text style={mainStyles.labelText}>Branch Name:</Text>
-                        </View>
-                        <View>
-                          <Text style={mainStyles.value}>
-                            {this.props.profile.profile.bankDetail.branchName}
-                          </Text>
-                        </View>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="file-o"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>IFSC code:</Text>
                       </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {this.props.profile.profile.bankDetail.ifscCode}
+                        </Text>
+                      </View>
+                    </View>
 
-                      <View style={mainStyles.infoGroup}>
-                        <View style={mainStyles.row}>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="file-o"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>Branch Name:</Text>
+                      </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {this.props.profile.profile.bankDetail.branchName}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.row}>
+                        <View style={{flex: 1}}>
+                          <Text h4>Status:</Text>
+                        </View>
+                        <View style={{flex: 1}}>
                           <View style={{flex: 1}}>
-                            <Text h4>Status:</Text>
-                          </View>
-                          <View style={{flex: 1}}>
-                            {this.props.profile.profile.bankDetail.verified ? (
-                              <Text h4 style={{color: 'green', marginLeft: 10}}>
-                                Verified
-                              </Text>
-                            ) : (
-                              <Text h4 style={{color: 'red', marginLeft: 10}}>
-                                Not Verified
-                              </Text>
-                            )}
+                            <Text
+                              h4
+                              h4Style={{
+                                color: getVerificationStatus(
+                                  this.props.profile.profile.bankDetail
+                                    .verification,
+                                ).color,
+                              }}>
+                              {
+                                getVerificationStatus(
+                                  this.props.profile.profile.bankDetail
+                                    .verification,
+                                ).label
+                              }
+                            </Text>
                           </View>
                         </View>
                       </View>
                     </View>
-                  )}
-                </Card>
-              </View>
+                  </View>
+                )}
+              </Card>
             </View>
           )}
         </ScrollView>

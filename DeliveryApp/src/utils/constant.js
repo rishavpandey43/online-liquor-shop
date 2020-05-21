@@ -1,5 +1,5 @@
-// export const baseUrl = 'http://192.168.43.240:5555';
-export const baseUrl = 'https://e-samagri-backend.herokuapp.com';
+export const baseUrl = 'http://192.168.43.240:5555';
+// export const baseUrl = 'https://e-madhushala-backend.herokuapp.com';
 
 export const authTokenName = 'eSamagri_delivery_auth_token';
 
@@ -51,5 +51,23 @@ export const orderStatus = [
     label: 'Delivered',
     value: 'del',
     color: 'green',
+  },
+];
+
+export const verificationStatus = [
+  {
+    label: 'Pending',
+    value: 'pen',
+    color: 'orange',
+  },
+  {
+    label: 'Verified',
+    value: 'ver',
+    color: 'green',
+  },
+  {
+    label: 'Rejected',
+    value: 'rej',
+    color: 'red',
   },
 ];

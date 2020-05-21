@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 
 import {
   verificationDocumentType,
+  verificationStatus,
   categoryList,
   orderStatus,
   paymentMode,
@@ -74,6 +75,12 @@ export const getVerificationDocumentName = documentValue => {
       document => document.value === documentValue,
     )[0].name || '-'
   );
+};
+
+export const getVerificationStatus = type => {
+  return verificationStatus.filter(
+    verification => verification.value === type,
+  )[0];
 };
 
 export const getCategoryName = categoryValue => {

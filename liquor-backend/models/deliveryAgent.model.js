@@ -1,4 +1,4 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose');
 
 const Schema = mongoose.Schema;
 
@@ -18,22 +18,22 @@ const deliveryAgentSchema = new Schema(
     profileVerificationDetail: {
       type: { type: String, require: false },
       number: { type: Number, require: false },
-      verified: { type: Boolean, required: true },
-      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
+      verification: { type: String, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Document' },
     },
     vehicleDetail: {
       drivingLicence: { type: String, required: false },
       vehicleModel: { type: String, required: false },
-      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
-      verified: { type: Boolean, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Document' },
+      verification: { type: String, required: false },
     },
     bankDetail: {
       name: { type: String, required: false },
       accountNumber: { type: Number, required: false },
       ifscCode: { type: String, required: false },
       branchName: { type: String, required: false },
-      documentId: { type: mongoose.Schema.Types.ObjectId, ref: "Document" },
-      verified: { type: Boolean, required: false },
+      documentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Document' },
+      verification: { type: String, required: false },
     },
   },
   {
@@ -41,8 +41,8 @@ const deliveryAgentSchema = new Schema(
   }
 );
 
-const groceryDB = mongoose.connection.useDb("liquor_db");
+const groceryDB = mongoose.connection.useDb('liquor_db');
 
-const DeliveryAgent = groceryDB.model("DeliveryAgent", deliveryAgentSchema);
+const DeliveryAgent = groceryDB.model('DeliveryAgent', deliveryAgentSchema);
 
 module.exports = DeliveryAgent;

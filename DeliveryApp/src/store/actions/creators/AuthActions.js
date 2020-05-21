@@ -49,7 +49,6 @@ export const registerFetch = (fcmDeviceToken, data) => dispatch => {
       dispatch(registerSuccess({token: res.data.token}));
     })
     .catch(err => {
-      console.log(err);
       ToastAndroid.show(
         err.response
           ? err.response.status != 500
