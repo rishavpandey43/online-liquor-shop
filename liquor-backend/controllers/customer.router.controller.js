@@ -249,20 +249,19 @@ exports.getCustomerController = (req, res, next) => {
 exports.getAllSellersController = (req, res, next) => {
   Customer.findOne({ _id: req.userId })
     .then((customer) => {
-      let customerState = customer.address.pincode.toString()[0];
       Seller.find({
         $and: [
           {
-            'storeDetail.address.pincode': {
-              $gt: customerState * 100000,
-              $lt: (customerState + 1) * 100000,
-            },
+            'storeDetail.address.pincode': customer.address.pincode,
           },
           {
-            'storeDetail.verified': true,
+            'profileVerificationDetail.verification': 'ver',
           },
           {
-            'bankDetail.verified': true,
+            'storeDetail.verification': 'ver',
+          },
+          {
+            'bankDetail.verification': 'ver',
           },
         ],
       })
@@ -379,6 +378,7 @@ exports.updateCartController = (req, res, next) => {
     .then((customer) => {
       if (customer) {
         let cartProducts = req.body.products;
+        console.log(cartProducts);
         Seller.findById(req.body.storeId)
           .populate([{ path: 'products.root', model: Product }])
           .then((seller) => {
