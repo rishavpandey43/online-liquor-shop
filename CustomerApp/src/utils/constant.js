@@ -1,7 +1,18 @@
 // export const baseUrl = 'http://192.168.43.240:5555';
-export const baseUrl = 'https://e-samagri-backend.herokuapp.com';
+export const baseUrl = 'https://e-madhushala-backend.herokuapp.com';
 
-export const authTokenName = 'eSamagri_customer_auth_token';
+export const authTokenName = 'eMadhushala_customer_auth_token';
+
+export const verificationDocumentType = [
+  {
+    name: 'Aadhar Card',
+    value: 'aadhar-id',
+  },
+  {
+    name: 'Voter ID Card',
+    value: 'voter-id',
+  },
+];
 
 export const addressType = [
   {
@@ -23,44 +34,40 @@ export const addressType = [
 
 export const categoryList = [
   {
-    name: 'All',
+    label: 'All',
     value: 'all',
   },
   {
-    name: 'Kitchen Staples',
-    value: 'ks',
+    label: 'Beer',
+    value: 'br',
   },
   {
-    name: 'Coffee, Tea & Beverages',
-    value: 'bs',
+    label: 'Vodka',
+    value: 'vod',
   },
   {
-    name: 'Dried Fruits, Nuts & Seeds',
-    value: 'dfns',
+    label: 'Whiskey',
+    value: 'wh',
   },
   {
-    name: 'Packed Foods',
-    value: 'pf',
+    label: 'Rum',
+    value: 'rm',
   },
   {
-    name: 'Snacks & Cookies',
-    value: 'sc',
+    label: 'Brandy',
+    value: 'brd',
   },
   {
-    name: 'Dairy Products',
-    value: 'dp',
+    label: 'Wine',
+    value: 'wn',
   },
   {
-    name: 'Bakery & Cakes',
-    value: 'bc',
+    label: 'Tequila',
+    value: 'tql',
   },
   {
-    name: 'Personal & Homecare',
-    value: 'ph',
-  },
-  {
-    name: 'Health & Wellness',
-    value: 'hw',
+    label: 'Desi Daru',
+    value: 'dd',
   },
 ];
 
@@ -109,6 +116,24 @@ export const orderStatus = [
   {
     label: 'Cancelled',
     value: 'can',
+    color: 'red',
+  },
+];
+
+export const verificationStatus = [
+  {
+    label: 'Pending',
+    value: 'pen',
+    color: 'orange',
+  },
+  {
+    label: 'Verified',
+    value: 'ver',
+    color: 'green',
+  },
+  {
+    label: 'Rejected',
+    value: 'rej',
     color: 'red',
   },
 ];

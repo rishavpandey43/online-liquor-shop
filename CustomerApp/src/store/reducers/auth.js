@@ -17,6 +17,25 @@ const auth = (state = initialState, action) => {
         isAuthenticated: action.token ? true : false,
         authToken: action.token,
       };
+    case actionTypes.REGISTER_REQUEST:
+      return {
+        ...state,
+        isLoading: true,
+      };
+    case actionTypes.REGISTER_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthenticated: true,
+        authToken: action.token,
+        errMessage: null,
+      };
+    case actionTypes.REGISTER_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        errMessage: action.errMessage,
+      };
     case actionTypes.LOGIN_REQUEST:
       return {
         ...state,

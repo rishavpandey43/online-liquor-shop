@@ -3,9 +3,9 @@ import React, {useState} from 'react';
 import {View, Text} from 'react-native';
 import {Icon} from 'react-native-elements';
 
-// * Import all store related stuffs
-
 // * Import all screens/components
+
+// * Import all store related stuffs
 
 // * Import utilites
 
@@ -18,21 +18,22 @@ const CardCustomTitle = ({title, detail, type, onPress}) => {
 
   return (
     <View style={mainStyles.row}>
-      <View style={mainStyles.col6}>
+      <View
+        style={{
+          flex: 3,
+        }}>
         <Text style={{fontSize: 18, fontWeight: 'bold', paddingTop: 10}}>
           {title}
         </Text>
       </View>
       <View
-        style={[
-          mainStyles.col6,
-          {
-            alignItems: 'flex-end',
-            justifyContent: 'center',
-            display: `${detail ? 'flex' : 'none'}`,
-            padding: 10,
-          },
-        ]}>
+        style={{
+          flex: 1,
+          alignItems: 'flex-end',
+          justifyContent: 'center',
+          display: `${detail ? 'flex' : 'none'}`,
+          padding: 10,
+        }}>
         <Icon
           name={`${type === 'edit' ? 'pencil' : customIconName}`}
           type="font-awesome"

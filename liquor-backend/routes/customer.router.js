@@ -1,6 +1,7 @@
 const express = require("express");
 
-const middleWares = require("../middlewares/authenticate");
+const authenticate = require("../middlewares/authenticate");
+const fileUpload = require("../middlewares/fileUpload");
 
 const customerRouterController = require("../controllers/customer.router.controller");
 
@@ -17,30 +18,31 @@ customerRouter
     customerRouterController.requestPhoneOTPForLogin
   )
   .get("/login", customerRouterController.login)
-  .get("/logout", middleWares.verifyUserToken, customerRouterController.logout)
+  .get("/logout", authenticate.verifyUserToken, customerRouterController.logout)
   .get(
     "/get-customer",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     customerRouterController.getCustomerController
   )
   .get(
     "/get-all-sellers",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     customerRouterController.getAllSellersController
   )
   .put(
     "/update-customer",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
+    fileUpload.upload.single("file"),
     customerRouterController.updateCustomerDetailController
   )
   .get(
     "/get-cart",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     customerRouterController.getCartController
   )
   .put(
     "/update-cart",
-    middleWares.verifyUserToken,
+    authenticate.verifyUserToken,
     customerRouterController.updateCartController
   );
 

@@ -96,9 +96,9 @@ export const updateCartToAsyncStorageFailure = () => {
 
 export const updateCartToAsyncStorageFetch = (type, cart) => dispatch => {
   dispatch(updateCartToAsyncStorageRequest());
-  storeDataInAsync('eSamagri_customer_cart', JSON.stringify(cart))
+  storeDataInAsync('eMadhushala_customer_cart', JSON.stringify(cart))
     .then(response => {
-      getDataFromAsync('eSamagri_customer_cart')
+      getDataFromAsync('eMadhushala_customer_cart')
         .then(updatedCart => {
           dispatch(updateCartToAsyncStorageSuccess());
           if (type == 'new') {
@@ -152,7 +152,7 @@ export const updateCartToServerFailure = () => {
 
 export const updateCartToServerFetch = token => dispatch => {
   dispatch(updateCartToServerRequest());
-  getDataFromAsync('eSamagri_customer_cart')
+  getDataFromAsync('eMadhushala_customer_cart')
     .then(cart => {
       axios
         .put(baseUrl + '/customer/update-cart', cart, {
@@ -163,11 +163,11 @@ export const updateCartToServerFetch = token => dispatch => {
         })
         .then(res => {
           storeDataInAsync(
-            'eSamagri_customer_cart',
+            'eMadhushala_customer_cart',
             JSON.stringify(res.data.newCart),
           )
             .then(response => {
-              getDataFromAsync('eSamagri_customer_cart')
+              getDataFromAsync('eMadhushala_customer_cart')
                 .then(updatedCart => {
                   dispatch(updateCartToServerSuccess(JSON.parse(updatedCart)));
                 })

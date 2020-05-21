@@ -1,7 +1,7 @@
-export const baseUrl = 'http://192.168.43.240:5555';
-// export const baseUrl = 'https://e-samagri-backend.herokuapp.com';
+// export const baseUrl = 'http://192.168.43.240:5555';
+export const baseUrl = 'https://e-madhushala-backend.herokuapp.com';
 
-export const authTokenName = 'eSamagri_seller_auth_token';
+export const authTokenName = 'eMadhushala_seller_auth_token';
 
 export const verificationDocumentType = [
   {
@@ -20,40 +20,36 @@ export const categoryList = [
     value: '',
   },
   {
-    label: 'Kitchen Staples',
-    value: 'ks',
+    label: 'Beer',
+    value: 'br',
   },
   {
-    label: 'Coffee, Tea & Beverages',
-    value: 'bs',
+    label: 'Vodka',
+    value: 'vod',
   },
   {
-    label: 'Dried Fruits, Nuts & Seeds',
-    value: 'dfns',
+    label: 'Whiskey',
+    value: 'wh',
   },
   {
-    label: 'Packed Foods',
-    value: 'pf',
+    label: 'Rum',
+    value: 'rm',
   },
   {
-    label: 'Snacks & Cookies',
-    value: 'sc',
+    label: 'Brandy',
+    value: 'brd',
   },
   {
-    label: 'Dairy Products',
-    value: 'dp',
+    label: 'Wine',
+    value: 'wn',
   },
   {
-    label: 'Bakery & Cakes',
-    value: 'bc',
+    label: 'Tequila',
+    value: 'tql',
   },
   {
-    label: 'Personal & Homecare',
-    value: 'ph',
-  },
-  {
-    label: 'Health & Wellness',
-    value: 'hw',
+    label: 'Desi Daru',
+    value: 'dd',
   },
 ];
 
@@ -102,6 +98,24 @@ export const orderStatus = [
   {
     label: 'Cancelled',
     value: 'can',
+    color: 'red',
+  },
+];
+
+export const verificationStatus = [
+  {
+    label: 'Pending',
+    value: 'pen',
+    color: 'orange',
+  },
+  {
+    label: 'Verified',
+    value: 'ver',
+    color: 'green',
+  },
+  {
+    label: 'Rejected',
+    value: 'rej',
     color: 'red',
   },
 ];

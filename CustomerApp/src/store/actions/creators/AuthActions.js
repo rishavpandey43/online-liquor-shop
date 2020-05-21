@@ -98,7 +98,7 @@ export const loginFetch = (fcmDeviceToken, {phone, otp}) => dispatch => {
     })
     .then(res => {
       storeDataInAsync(authTokenName, res.data.token);
-      ToastAndroid.show('Login Successfull', ToastAndroid.LONG);
+      ToastAndroid.show('Login Successfull', ToastAndroid.SHORT);
       dispatch(loginSuccess({token: res.data.token}));
     })
     .catch(err => {
@@ -151,12 +151,17 @@ export const logoutFetch = token => dispatch => {
       removeDataFromAsync(authTokenName)
         .then(response => {
           dispatch(logoutSuccess());
+          ToastAndroid.show(
+            "You've been logged Successfully",
+            ToastAndroid.SHORT,
+          );
         })
         .catch(err => {
           dispatch(logoutFailure());
         });
     })
     .catch(err => {
+      dispatch(logoutFailure());
       ToastAndroid.show(
         err.response
           ? err.response.status != 500
@@ -165,6 +170,5 @@ export const logoutFetch = token => dispatch => {
           : 'Some error occured, try again.',
         ToastAndroid.LONG,
       );
-      dispatch(logoutFailure());
     });
 };

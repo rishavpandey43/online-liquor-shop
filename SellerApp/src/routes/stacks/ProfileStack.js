@@ -27,7 +27,7 @@ const ProfileStack = () => (
       }}
     />
     <Stack.Screen
-      name="edit-profile-screen"
+      name="update-profile-screen"
       component={UpdateProfileScreen}
       options={{
         title: 'Profile',

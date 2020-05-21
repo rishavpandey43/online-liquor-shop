@@ -94,11 +94,12 @@ class ProductsScreen extends Component {
               />
             </Card>
           ) : !this.props.profile.profile.profileVerificationDetail ||
-            !this.props.profile.profile.profileVerificationDetail.verified ||
+            this.props.profile.profile.profileVerificationDetail
+              .verification !== 'ver' ||
             !this.props.profile.profile.storeDetail ||
-            !this.props.profile.profile.storeDetail.verified ||
+            this.props.profile.profile.storeDetail.verification !== 'ver' ||
             !this.props.profile.profile.bankDetail ||
-            !this.props.profile.profile.bankDetail.verified ? (
+            this.props.profile.profile.bankDetail.verification !== 'ver' ? (
             <View>
               <Text style={{padding: 10, fontSize: 18}}>
                 Your profile verification is still pending. You can enjoy the
@@ -116,7 +117,7 @@ class ProductsScreen extends Component {
               }}>
               <Card containerStyle={{alignItems: 'center'}}>
                 <Text style={{marginBottom: 20, fontSize: 20, color: 'green'}}>
-                  No Product in your store.
+                  No Product in your shop.
                 </Text>
                 <Button
                   title="Add your first product now"

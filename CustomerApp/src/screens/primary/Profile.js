@@ -27,7 +27,11 @@ import Address from '../../components/Address';
 import CardCustomTitle from '../../components/CardCustomTitle';
 
 // * Import utilites
-import {obtainAddressInString} from '../../utils/helper';
+import {
+  obtainAddressInString,
+  getVerificationDocumentName,
+  getVerificationStatus,
+} from '../../utils/helper';
 
 // * Import all styling stuffs
 import mainStyles from '../../styles/mainStyle';
@@ -165,7 +169,117 @@ class ProfileScreen extends Component {
               </Card>
 
               <Card
-                containerStyle={{borderRadius: 10, alignItems: 'center'}}
+                title={
+                  <CardCustomTitle
+                    title="Your Profile Verification"
+                    type="edit"
+                    detail={
+                      this.props.profile.profile.profileVerificationDetail
+                    }
+                    onPress={() => {
+                      this.props.navigation.navigate('update-profile-screen');
+                    }}
+                  />
+                }
+                containerStyle={{borderRadius: 10}}>
+                {!this.props.profile.profile.profileVerificationDetail ? (
+                  <View style={{alignItems: 'center'}}>
+                    <Text style={{margin: 10}}>
+                      You haven't added verification detail yet.
+                    </Text>
+                    <Button
+                      title="Add your verification detail now"
+                      type="outline"
+                      titleStyle={{color: variables.mainThemeColor}}
+                      buttonStyle={mainStyles.outlineBtn}
+                      onPress={() => {
+                        this.props.navigation.navigate('update-profile-screen');
+                      }}
+                    />
+                  </View>
+                ) : (
+                  <View>
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="shopping-cart"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>
+                          Verification done through:
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {getVerificationDocumentName(
+                            this.props.profile.profile.profileVerificationDetail
+                              .type,
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.labelGroup}>
+                        <Icon
+                          name="file-o"
+                          type="font-awesome"
+                          color={variables.mainThemeColor}
+                          size={20}
+                          containerStyle={styles.marginRight}
+                        />
+                        <Text style={mainStyles.labelText}>
+                          {`${getVerificationDocumentName(
+                            this.props.profile.profile.profileVerificationDetail
+                              .type,
+                          )} Number :`}
+                        </Text>
+                      </View>
+                      <View>
+                        <Text style={mainStyles.value}>
+                          {
+                            this.props.profile.profile.profileVerificationDetail
+                              .number
+                          }
+                        </Text>
+                      </View>
+                    </View>
+
+                    <View style={mainStyles.infoGroup}>
+                      <View style={mainStyles.row}>
+                        <View style={{flex: 1}}>
+                          <Text h4>Status:</Text>
+                        </View>
+                        <View style={{flex: 1}}>
+                          <View style={{flex: 1}}>
+                            <Text
+                              h4
+                              h4Style={{
+                                color: getVerificationStatus(
+                                  this.props.profile.profile
+                                    .profileVerificationDetail.verification,
+                                ).color,
+                              }}>
+                              {
+                                getVerificationStatus(
+                                  this.props.profile.profile
+                                    .profileVerificationDetail.verification,
+                                ).label
+                              }
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  </View>
+                )}
+              </Card>
+
+              <Card
+                containerStyle={{borderRadius: 10}}
                 title={
                   <CardCustomTitle
                     title="Your address"

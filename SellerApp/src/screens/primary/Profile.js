@@ -12,7 +12,10 @@ import * as ProfileActions from '../../store/actions/creators/ProfileActions';
 import CardCustomTitle from '../../components/CardCustomTitle';
 
 // * Import utilites
-import {getVerificationDocumentName} from '../../utils/helper';
+import {
+  getVerificationDocumentName,
+  getVerificationStatus,
+} from '../../utils/helper';
 
 // * Import all styling stuffs
 import mainStyles from '../../styles/mainStyle';
@@ -125,7 +128,7 @@ class ProfileScreen extends Component {
                       this.props.profile.profile.profileVerificationDetail
                     }
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -141,7 +144,7 @@ class ProfileScreen extends Component {
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>
@@ -202,16 +205,23 @@ class ProfileScreen extends Component {
                           <Text h4>Status:</Text>
                         </View>
                         <View style={{flex: 1}}>
-                          {this.props.profile.profile.profileVerificationDetail
-                            .verified ? (
-                            <Text h4 style={{color: 'green', marginLeft: 10}}>
-                              Verified
+                          <View style={{flex: 1}}>
+                            <Text
+                              h4
+                              h4Style={{
+                                color: getVerificationStatus(
+                                  this.props.profile.profile
+                                    .profileVerificationDetail.verification,
+                                ).color,
+                              }}>
+                              {
+                                getVerificationStatus(
+                                  this.props.profile.profile
+                                    .profileVerificationDetail.verification,
+                                ).label
+                              }
                             </Text>
-                          ) : (
-                            <Text h4 style={{color: 'red', marginLeft: 10}}>
-                              Not Verified
-                            </Text>
-                          )}
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -222,11 +232,11 @@ class ProfileScreen extends Component {
               <Card
                 title={
                   <CardCustomTitle
-                    title="Store Detail"
+                    title="Shop Detail"
                     type="edit"
                     detail={this.props.profile.profile.storeDetail}
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -235,12 +245,12 @@ class ProfileScreen extends Component {
                   <View style={{alignItems: 'center'}}>
                     <Text style={{margin: 10}}>No Store added</Text>
                     <Button
-                      title="Add your store"
+                      title="Add your shop"
                       type="outline"
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>
@@ -255,7 +265,7 @@ class ProfileScreen extends Component {
                           size={20}
                           containerStyle={styles.marginRight}
                         />
-                        <Text style={mainStyles.labelText}>Store Name:</Text>
+                        <Text style={mainStyles.labelText}>Shop Name:</Text>
                       </View>
                       <View>
                         <Text style={mainStyles.value}>
@@ -273,7 +283,7 @@ class ProfileScreen extends Component {
                           size={20}
                           containerStyle={styles.marginRight}
                         />
-                        <Text style={mainStyles.labelText}>Store Address:</Text>
+                        <Text style={mainStyles.labelText}>Shop Address:</Text>
                       </View>
                       <View>
                         <Text style={mainStyles.value}>
@@ -326,15 +336,21 @@ class ProfileScreen extends Component {
                         <Text h4>Status:</Text>
                       </View>
                       <View style={{flex: 1}}>
-                        {this.props.profile.profile.storeDetail.verified ? (
-                          <Text h4 style={{color: 'green', marginLeft: 10}}>
-                            Verified
-                          </Text>
-                        ) : (
-                          <Text h4 style={{color: 'red', marginLeft: 10}}>
-                            Not Verified
-                          </Text>
-                        )}
+                        <Text
+                          h4
+                          h4Style={{
+                            color: getVerificationStatus(
+                              this.props.profile.profile.storeDetail
+                                .verification,
+                            ).color,
+                          }}>
+                          {
+                            getVerificationStatus(
+                              this.props.profile.profile.storeDetail
+                                .verification,
+                            ).label
+                          }
+                        </Text>
                       </View>
                     </View>
                   </View>
@@ -348,7 +364,7 @@ class ProfileScreen extends Component {
                     type="edit"
                     detail={this.props.profile.profile.bankDetail}
                     onPress={() => {
-                      this.props.navigation.navigate('edit-profile-screen');
+                      this.props.navigation.navigate('update-profile-screen');
                     }}
                   />
                 }
@@ -362,7 +378,7 @@ class ProfileScreen extends Component {
                       titleStyle={{color: variables.mainThemeColor}}
                       buttonStyle={mainStyles.outlineBtn}
                       onPress={() => {
-                        this.props.navigation.navigate('edit-profile-screen');
+                        this.props.navigation.navigate('update-profile-screen');
                       }}
                     />
                   </View>
@@ -448,15 +464,23 @@ class ProfileScreen extends Component {
                           <Text h4>Status:</Text>
                         </View>
                         <View style={{flex: 1}}>
-                          {this.props.profile.profile.bankDetail.verified ? (
-                            <Text h4 style={{color: 'green', marginLeft: 10}}>
-                              Verified
+                          <View style={{flex: 1}}>
+                            <Text
+                              h4
+                              h4Style={{
+                                color: getVerificationStatus(
+                                  this.props.profile.profile.bankDetail
+                                    .verification,
+                                ).color,
+                              }}>
+                              {
+                                getVerificationStatus(
+                                  this.props.profile.profile.bankDetail
+                                    .verification,
+                                ).label
+                              }
                             </Text>
-                          ) : (
-                            <Text h4 style={{color: 'red', marginLeft: 10}}>
-                              Not Verified
-                            </Text>
-                          )}
+                          </View>
                         </View>
                       </View>
                     </View>
@@ -501,7 +525,3 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
 )(ProfileScreen);
-
-{
-  /* ; */
-}

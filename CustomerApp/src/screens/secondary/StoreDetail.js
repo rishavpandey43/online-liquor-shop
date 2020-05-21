@@ -41,7 +41,7 @@ class StoreDetailScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      selectedCategory: {name: 'All', value: 'all'},
+      selectedCategory: {label: 'All', value: 'all'},
       filteredProduct: this.props.store.store
         ? this.props.store.store.products
         : [],
@@ -229,38 +229,6 @@ class StoreDetailScreen extends Component {
             }))}
             placeholder={{}}
           />
-          {/* <Picker
-            selectedValue={
-              this.state.productVariantForPicker.filter(
-                variant => variant.productId === product._id,
-              )[0].value
-            }
-            style={{height: 40, width: 'auto', marginTop: 10}}
-            onValueChange={(itemValue, itemIndex) => {
-              // * AWESOME LOGIC TO CHANGE THE VARIANT PICKER ;)
-              let productIndex = null;
-              this.state.productVariantForPicker.forEach((variant, i) => {
-                if (product._id === variant.productId) {
-                  productIndex = i;
-                }
-              });
-              let tempProductVariantForPicker = this.state
-                .productVariantForPicker;
-              tempProductVariantForPicker[productIndex].value = itemValue;
-              tempProductVariantForPicker[productIndex].variantId =
-                product.variants[itemIndex]._id;
-              this.setState({
-                productVariantForPicker: tempProductVariantForPicker,
-              });
-            }}>
-            {product.variants.map((variant, index) => (
-              <Picker.Item
-                key={index}
-                label={`${variant.value}/₹ ${variant.price}`}
-                value={variant.value}
-              />
-            ))}
-          </Picker> */}
         </View>
         <View style={{flex: 1, justifyContent: 'center', marginLeft: 5}}>
           {this.props.cart.cart ? (
@@ -501,7 +469,7 @@ class StoreDetailScreen extends Component {
                               ? styles.selected
                               : '',
                           ]}>
-                          {category.name}
+                          {category.label}
                         </Text>
                       </TouchableOpacity>
                     ),
@@ -535,7 +503,7 @@ class StoreDetailScreen extends Component {
                 <View>
                   <View>
                     <Text style={{fontSize: 18, fontWeight: 'bold'}}>
-                      {this.state.selectedCategory.name}:
+                      {this.state.selectedCategory.label}:
                     </Text>
                   </View>
                   {this.state.filteredProduct.length === 0 ? (

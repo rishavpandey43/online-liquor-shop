@@ -1,44 +1,44 @@
-const express = require("express");
+const express = require('express');
 
-const middleWares = require("../middlewares/authenticate");
+const middleWares = require('../middlewares/authenticate');
 
-const orderRouterController = require("../controllers/order.router.controller");
+const orderRouterController = require('../controllers/order.router.controller');
 
 const orderRouter = express.Router(); // initialize express router
 
 orderRouter
   .get(
-    "/get-all-orders-customer",
+    '/get-all-orders-customer',
     middleWares.verifyUserToken,
     orderRouterController.getAllOrdersCustomer
   )
   .post(
-    "/place-order",
+    '/place-order',
     middleWares.verifyUserToken,
     orderRouterController.placeOrder
   )
   .get(
-    "/get-all-orders-seller",
+    '/get-all-orders-seller',
     middleWares.verifyUserToken,
     orderRouterController.getAllOrdersSeller
   )
   .put(
-    "/process-order-seller",
+    '/process-order-seller',
     middleWares.verifyUserToken,
     orderRouterController.processOrderSeller
   )
   .get(
-    "/get-delivery-not-assigned-orders-deliveryAgent",
+    '/get-delivery-not-assigned-orders-deliveryAgent',
     middleWares.verifyUserToken,
     orderRouterController.getDeliveryNotAssignedOrders
   )
   .get(
-    "/get-all-orders-deliveryAgent",
+    '/get-all-orders-deliveryAgent',
     middleWares.verifyUserToken,
     orderRouterController.getAllOrdersDeliveryAgent
   )
   .put(
-    "/process-order-deliveryAgent",
+    '/process-order-deliveryAgent',
     middleWares.verifyUserToken,
     orderRouterController.processOrderDeliveryAgent
   );

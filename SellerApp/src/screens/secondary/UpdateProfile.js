@@ -39,7 +39,7 @@ class UpdateProfileScreen extends Component {
     super(props);
     this.state = {
       personalDetailCardDisplay: false,
-      profileVerificationDetailCardDisplay: true,
+      profileVerificationDetailCardDisplay: false,
       storeDetailCardDisplay: false,
       bankDetailCardDisplay: false,
       profileVerificationDetail: {
@@ -47,6 +47,7 @@ class UpdateProfileScreen extends Component {
         number: '',
         document: {
           name: '',
+          type: '',
           uri: '',
         },
       },
@@ -62,6 +63,7 @@ class UpdateProfileScreen extends Component {
         gstNumber: '',
         document: {
           name: '',
+          type: '',
           uri: '',
         },
       },
@@ -72,6 +74,7 @@ class UpdateProfileScreen extends Component {
         branchName: '',
         document: {
           name: '',
+          type: '',
           uri: '',
         },
       },
@@ -93,6 +96,7 @@ class UpdateProfileScreen extends Component {
           number: '',
           document: {
             name: '',
+            type: '',
             uri: '',
           },
         },
@@ -108,6 +112,7 @@ class UpdateProfileScreen extends Component {
           gstNumber: '',
           document: {
             name: '',
+            type: '',
             uri: '',
           },
         },
@@ -118,6 +123,7 @@ class UpdateProfileScreen extends Component {
           branchName: '',
           document: {
             name: '',
+            type: '',
             uri: '',
           },
         },
@@ -129,7 +135,6 @@ class UpdateProfileScreen extends Component {
     this.setState({[target]: !this.state[target]});
   };
 
-  // TODO: Implement file upload functionality
   _uploadDocument = async type => {
     try {
       const result = await DocumentPicker.pick({
@@ -140,6 +145,7 @@ class UpdateProfileScreen extends Component {
           ...this.state[type],
           document: {
             name: result.name,
+            type: result.type,
             uri: result.uri,
           },
         },
@@ -173,19 +179,27 @@ class UpdateProfileScreen extends Component {
       Alert.alert('Input Invalid', 'Please fill all the details to continue.');
       return;
     } else {
-      let data =
+      let data = {};
+
+      for (const key in tempData) {
+        if (key != 'document') {
+          data[key] = tempData[key];
+        }
+      }
+      data =
         detailType !== 'personalDetail'
           ? {
-              ...tempData,
-              verified: false,
+              ...data,
+              verification: 'pen',
             }
           : {
-              ...tempData,
+              ...data,
             };
       this.props.updateProfileFetch(
         this.props.auth.authToken,
         data,
         detailType,
+        tempData.document,
       );
     }
   };
@@ -254,121 +268,349 @@ class UpdateProfileScreen extends Component {
                     }}
                   />
                 }>
-                <View
-                  style={{
-                    display: `${
-                      this.state.profileVerificationDetailCardDisplay
-                        ? 'flex'
-                        : 'none'
-                    }`,
-                  }}>
+                {this.props.profile.profile.profileVerificationDetail &&
+                this.props.profile.profile.profileVerificationDetail
+                  .verification === 'pen' ? (
                   <View>
-                    <View style={mainStyles.formGroup}>
-                      <Text style={mainStyles.formLabel}>Document type:</Text>
-                      <View style={mainStyles.row}>
-                        <View style={{flex: 1}}>
-                          <CheckBox
-                            containerStyle={{
-                              backgroundColor: 'transparent',
-                              borderColor: 'transparent',
-                            }}
-                            center
-                            title="Aadhar Card"
-                            checkedIcon="dot-circle-o"
-                            uncheckedIcon="circle-o"
-                            checkedColor={variables.mainThemeColor}
-                            checked={
-                              this.state.profileVerificationDetail.type ===
-                              'aadhar-id'
-                            }
-                            onPress={() => {
-                              this.setState({
-                                profileVerificationDetail: {
-                                  ...this.state.profileVerificationDetail,
-                                  type: 'aadhar-id',
-                                },
-                              });
-                            }}
-                          />
+                    <Text>
+                      You've filled the detail, please wait for it's
+                      verification to complete.
+                    </Text>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      display: `${
+                        this.state.profileVerificationDetailCardDisplay
+                          ? 'flex'
+                          : 'none'
+                      }`,
+                    }}>
+                    <View>
+                      <View style={mainStyles.formGroup}>
+                        <Text style={mainStyles.formLabel}>Document type:</Text>
+                        <View style={mainStyles.row}>
+                          <View style={{flex: 1}}>
+                            <CheckBox
+                              containerStyle={{
+                                backgroundColor: 'transparent',
+                                borderColor: 'transparent',
+                              }}
+                              center
+                              title="Aadhar Card"
+                              checkedIcon="dot-circle-o"
+                              uncheckedIcon="circle-o"
+                              checkedColor={variables.mainThemeColor}
+                              checked={
+                                this.state.profileVerificationDetail.type ===
+                                'aadhar-id'
+                              }
+                              onPress={() => {
+                                this.setState({
+                                  profileVerificationDetail: {
+                                    ...this.state.profileVerificationDetail,
+                                    type: 'aadhar-id',
+                                  },
+                                });
+                              }}
+                            />
+                          </View>
+                          <View style={{flex: 1}}>
+                            <CheckBox
+                              containerStyle={{
+                                backgroundColor: 'transparent',
+                                borderColor: 'transparent',
+                              }}
+                              center
+                              title="Voter ID Card"
+                              checkedIcon="dot-circle-o"
+                              uncheckedIcon="circle-o"
+                              checkedColor={variables.mainThemeColor}
+                              checked={
+                                this.state.profileVerificationDetail.type ===
+                                'voter-id'
+                              }
+                              onPress={() => {
+                                this.setState({
+                                  profileVerificationDetail: {
+                                    ...this.state.profileVerificationDetail,
+                                    type: 'voter-id',
+                                  },
+                                });
+                              }}
+                            />
+                          </View>
                         </View>
-                        <View style={{flex: 1}}>
-                          <CheckBox
-                            containerStyle={{
-                              backgroundColor: 'transparent',
-                              borderColor: 'transparent',
-                            }}
-                            center
-                            title="Voter ID Card"
-                            checkedIcon="dot-circle-o"
-                            uncheckedIcon="circle-o"
-                            checkedColor={variables.mainThemeColor}
-                            checked={
-                              this.state.profileVerificationDetail.type ===
-                              'voter-id'
-                            }
-                            onPress={() => {
-                              this.setState({
-                                profileVerificationDetail: {
-                                  ...this.state.profileVerificationDetail,
-                                  type: 'voter-id',
-                                },
-                              });
-                            }}
-                          />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label={`${getVerificationDocumentName(
+                            this.state.profileVerificationDetail.type,
+                          )} number`}
+                          placeholder={`Enter valid ${getVerificationDocumentName(
+                            this.state.profileVerificationDetail.type,
+                          )} number`}
+                          value={this.state.profileVerificationDetail.number}
+                          onChangeText={number => {
+                            this.setState({
+                              profileVerificationDetail: {
+                                ...this.state.profileVerificationDetail,
+                                number,
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+                      <View style={mainStyles.formGroup}>
+                        <Text
+                          style={
+                            mainStyles.formLabel
+                          }>{`Enter scanned ${getVerificationDocumentName(
+                          this.state.profileVerificationDetail.type,
+                        )} in pdf format`}</Text>
+                        <View style={mainStyles.row}>
+                          <View style={mainStyles.col6}>
+                            <Button
+                              title="Choose file"
+                              titleStyle={{color: variables.mainThemeColor}}
+                              type="clear"
+                              onPress={this._uploadDocument.bind(
+                                null,
+                                'profileVerificationDetail',
+                              )}
+                            />
+                          </View>
+                          <View
+                            style={
+                              (mainStyles.col6, {justifyContent: 'center'})
+                            }>
+                            <Text>
+                              {this.state.profileVerificationDetail.document
+                                .name || 'No file choosen'}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <View style={[mainStyles.row, {marginBottom: 10}]}>
+                          <View style={mainStyles.col6}>
+                            <Button
+                              title="Cancel"
+                              titleStyle={{color: variables.mainThemeColor}}
+                              type="outline"
+                              buttonStyle={mainStyles.outlineBtn}
+                              onPress={() => {
+                                this.setState({
+                                  profileVerificationDetailCardDisplay: false,
+                                  profileVerificationDetail: {
+                                    type: 'aadhar-id',
+                                    number: '',
+                                    document: {
+                                      name: '',
+                                      type: '',
+                                      uri: '',
+                                    },
+                                  },
+                                });
+                              }}
+                            />
+                          </View>
+                          <View style={mainStyles.col6}>
+                            <Button
+                              title="Submit"
+                              titleStyle={{color: variables.mainThemeColor}}
+                              type="outline"
+                              buttonStyle={mainStyles.outlineBtn}
+                              onPress={() => {
+                                this._updateDetail('profileVerificationDetail');
+                              }}
+                              loading={this.props.profile.profileUpdating}
+                            />
+                          </View>
                         </View>
                       </View>
                     </View>
+                  </View>
+                )}
+              </Card>
 
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label={`${getVerificationDocumentName(
-                          this.state.profileVerificationDetail.type,
-                        )} number`}
-                        placeholder={`Enter valid ${getVerificationDocumentName(
-                          this.state.profileVerificationDetail.type,
-                        )} number`}
-                        value={this.state.profileVerificationDetail.number}
-                        onChangeText={number => {
-                          this.setState({
-                            profileVerificationDetail: {
-                              ...this.state.profileVerificationDetail,
-                              number,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-                    <View style={mainStyles.formGroup}>
-                      <Text
-                        style={
-                          mainStyles.formLabel
-                        }>{`Enter scanned ${getVerificationDocumentName(
-                        this.state.profileVerificationDetail.type,
-                      )} in pdf format`}</Text>
-                      <View style={mainStyles.row}>
-                        <View style={mainStyles.col6}>
-                          <Button
-                            title="Choose file"
-                            titleStyle={{color: variables.mainThemeColor}}
-                            type="clear"
-                            onPress={this._uploadDocument.bind(
-                              null,
-                              'profileVerificationDetail',
-                            )}
-                          />
-                        </View>
-                        <View
-                          style={(mainStyles.col6, {justifyContent: 'center'})}>
-                          <Text>
-                            {this.state.profileVerificationDetail.document
-                              .name || 'No file choosen'}
-                          </Text>
+              <Card
+                title={
+                  <CardCustomTitle
+                    title="Update Your Shop Detail"
+                    detail
+                    onPress={() => {
+                      this._toggleEditCardDisplay('storeDetailCardDisplay');
+                    }}
+                  />
+                }>
+                {this.props.profile.profile.storeDetail &&
+                this.props.profile.profile.storeDetail.verification ===
+                  'pen' ? (
+                  <View>
+                    <Text>
+                      You've filled the detail, please wait for it's
+                      verification.
+                    </Text>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      display: `${
+                        this.state.storeDetailCardDisplay ? 'flex' : 'none'
+                      }`,
+                    }}>
+                    <View>
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="Shop Name"
+                          placeholder="Fab Liquor Shop"
+                          value={this.state.storeDetail.name}
+                          onChangeText={name => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                name,
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Text style={{fontSize: 15, fontWeight: 'bold'}}>
+                          Address:
+                        </Text>
+                        <Input
+                          label="Street"
+                          placeholder="Panki Road"
+                          value={this.state.storeDetail.address.street}
+                          onChangeText={street => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                address: {
+                                  ...this.state.storeDetail.address,
+                                  street,
+                                },
+                              },
+                            });
+                          }}
+                        />
+                        <Input
+                          label="Landmark"
+                          placeholder="near NCC office"
+                          value={this.state.storeDetail.address.landmark}
+                          onChangeText={landmark => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                address: {
+                                  ...this.state.storeDetail.address,
+                                  landmark,
+                                },
+                              },
+                            });
+                          }}
+                        />
+                        <Input
+                          label="City"
+                          placeholder="Daltonganj"
+                          value={this.state.storeDetail.address.city}
+                          onChangeText={city => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                address: {
+                                  ...this.state.storeDetail.address,
+                                  city,
+                                },
+                              },
+                            });
+                          }}
+                        />
+                        <Input
+                          label="Pincode"
+                          placeholder="822134"
+                          keyboardType="numeric"
+                          value={this.state.storeDetail.address.pincode}
+                          onChangeText={pincode => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                address: {
+                                  ...this.state.storeDetail.address,
+                                  pincode,
+                                },
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="PAN Card Number"
+                          placeholder="DNAPXXXX0J"
+                          value={this.state.storeDetail.panCard}
+                          onChangeText={panCard => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                panCard,
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="GST Number"
+                          placeholder="36ARVPSXXXXF1ZF"
+                          value={this.state.storeDetail.gstNumber}
+                          onChangeText={gstNumber => {
+                            this.setState({
+                              storeDetail: {
+                                ...this.state.storeDetail,
+                                gstNumber,
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+                      <View style={mainStyles.formGroup}>
+                        <Text style={mainStyles.formLabel}>
+                          Enter scanned documents of shop in pdf format
+                        </Text>
+                        <View style={mainStyles.row}>
+                          <View style={mainStyles.col6}>
+                            <Button
+                              title="Choose file"
+                              titleStyle={{color: variables.mainThemeColor}}
+                              type="clear"
+                              onPress={this._uploadDocument.bind(
+                                null,
+                                'storeDetail',
+                              )}
+                            />
+                          </View>
+                          <View
+                            style={
+                              (mainStyles.col6, {justifyContent: 'center'})
+                            }>
+                            <Text>
+                              {this.state.storeDetail.document.name ||
+                                'No file choosen'}
+                            </Text>
+                          </View>
                         </View>
                       </View>
                     </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <View style={[mainStyles.row, {marginBottom: 10}]}>
+                    <View>
+                      <View style={[mainStyles.row, {marginBottom: 20}]}>
                         <View style={mainStyles.col6}>
                           <Button
                             title="Cancel"
@@ -377,12 +619,20 @@ class UpdateProfileScreen extends Component {
                             buttonStyle={mainStyles.outlineBtn}
                             onPress={() => {
                               this.setState({
-                                profileVerificationDetailCardDisplay: false,
-                                profileVerificationDetail: {
-                                  type: 'aadhar-id',
-                                  number: '',
+                                storeDetailCardDisplay: false,
+                                storeDetail: {
+                                  name: '',
+                                  address: {
+                                    street: '',
+                                    landmark: '',
+                                    city: '',
+                                    pincode: '',
+                                  },
+                                  panCard: '',
+                                  gstNumber: '',
                                   document: {
                                     name: '',
+                                    type: '',
                                     uri: '',
                                   },
                                 },
@@ -397,7 +647,7 @@ class UpdateProfileScreen extends Component {
                             type="outline"
                             buttonStyle={mainStyles.outlineBtn}
                             onPress={() => {
-                              this._updateDetail('profileVerificationDetail');
+                              this._updateDetail('storeDetail');
                             }}
                             loading={this.props.profile.profileUpdating}
                           />
@@ -405,205 +655,7 @@ class UpdateProfileScreen extends Component {
                       </View>
                     </View>
                   </View>
-                </View>
-              </Card>
-
-              <Card
-                title={
-                  <CardCustomTitle
-                    title="Update Your Store Detail"
-                    detail
-                    onPress={() => {
-                      this._toggleEditCardDisplay('storeDetailCardDisplay');
-                    }}
-                  />
-                }>
-                <View
-                  style={{
-                    display: `${
-                      this.state.storeDetailCardDisplay ? 'flex' : 'none'
-                    }`,
-                  }}>
-                  <View>
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="Store Name"
-                        placeholder="Sangam General Store"
-                        value={this.state.storeDetail.name}
-                        onChangeText={name => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              name,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <Text style={{fontSize: 15, fontWeight: 'bold'}}>
-                        Address:
-                      </Text>
-                      <Input
-                        label="Street"
-                        placeholder="Panki Road"
-                        value={this.state.storeDetail.address.street}
-                        onChangeText={street => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              address: {
-                                ...this.state.storeDetail.address,
-                                street,
-                              },
-                            },
-                          });
-                        }}
-                      />
-                      <Input
-                        label="Landmark"
-                        placeholder="near NCC office"
-                        value={this.state.storeDetail.address.landmark}
-                        onChangeText={landmark => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              address: {
-                                ...this.state.storeDetail.address,
-                                landmark,
-                              },
-                            },
-                          });
-                        }}
-                      />
-                      <Input
-                        label="City"
-                        placeholder="Daltonganj"
-                        value={this.state.storeDetail.address.city}
-                        onChangeText={city => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              address: {
-                                ...this.state.storeDetail.address,
-                                city,
-                              },
-                            },
-                          });
-                        }}
-                      />
-                      <Input
-                        label="Pincode"
-                        placeholder="822134"
-                        keyboardType="numeric"
-                        value={this.state.storeDetail.address.pincode}
-                        onChangeText={pincode => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              address: {
-                                ...this.state.storeDetail.address,
-                                pincode,
-                              },
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="PAN Card Number"
-                        placeholder="DNAPXXXX0J"
-                        value={this.state.storeDetail.panCard}
-                        onChangeText={panCard => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              panCard,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="GST Number"
-                        placeholder="36ARVPSXXXXF1ZF"
-                        value={this.state.storeDetail.gstNumber}
-                        onChangeText={gstNumber => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              gstNumber,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="GST Number"
-                        placeholder="36ARVPSXXXXF1ZF"
-                        value={this.state.storeDetail.gstNumber}
-                        onChangeText={gstNumber => {
-                          this.setState({
-                            storeDetail: {
-                              ...this.state.storeDetail,
-                              gstNumber,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-                  </View>
-                  <View>
-                    <View style={[mainStyles.row, {marginBottom: 20}]}>
-                      <View style={mainStyles.col6}>
-                        <Button
-                          title="Cancel"
-                          titleStyle={{color: variables.mainThemeColor}}
-                          type="outline"
-                          buttonStyle={mainStyles.outlineBtn}
-                          onPress={() => {
-                            this.setState({
-                              storeDetailCardDisplay: false,
-                              storeDetail: {
-                                name: '',
-                                address: {
-                                  street: '',
-                                  landmark: '',
-                                  city: '',
-                                  pincode: '',
-                                },
-                                panCard: '',
-                                gstNumber: '',
-                                // document: {
-                                //   name: '',
-                                //   uri: '',
-                                // },
-                              },
-                            });
-                          }}
-                        />
-                      </View>
-                      <View style={mainStyles.col6}>
-                        <Button
-                          title="Submit"
-                          titleStyle={{color: variables.mainThemeColor}}
-                          type="outline"
-                          buttonStyle={mainStyles.outlineBtn}
-                          onPress={() => {
-                            this._updateDetail('storeDetail');
-                          }}
-                          loading={this.props.profile.profileUpdating}
-                        />
-                      </View>
-                    </View>
-                  </View>
-                </View>
+                )}
               </Card>
 
               <Card
@@ -616,114 +668,155 @@ class UpdateProfileScreen extends Component {
                     }}
                   />
                 }>
-                <View
-                  style={{
-                    display: `${
-                      this.state.bankDetailCardDisplay ? 'flex' : 'none'
-                    }`,
-                  }}>
+                {this.props.profile.profile.bankDetail &&
+                this.props.profile.profile.bankDetail.verification === 'pen' ? (
                   <View>
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="Bank Name"
-                        placeholder="State Bank of India"
-                        value={this.state.bankDetail.name}
-                        onChangeText={name => {
-                          this.setState({
-                            bankDetail: {
-                              ...this.state.bankDetail,
-                              name,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="Account Number"
-                        keyboardType="numeric"
-                        placeholder="203XXXXXXX1"
-                        value={this.state.bankDetail.accountNumber}
-                        onChangeText={accountNumber => {
-                          this.setState({
-                            bankDetail: {
-                              ...this.state.bankDetail,
-                              accountNumber,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="IFSC Code"
-                        placeholder="SBXXXXXXX45"
-                        value={this.state.bankDetail.ifscCode}
-                        onChangeText={ifscCode => {
-                          this.setState({
-                            bankDetail: {
-                              ...this.state.bankDetail,
-                              ifscCode,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
-
-                    <View style={mainStyles.formGroup}>
-                      <Input
-                        label="Branch Name"
-                        placeholder="XYZ branch"
-                        value={this.state.bankDetail.branchName}
-                        onChangeText={branchName => {
-                          this.setState({
-                            bankDetail: {
-                              ...this.state.bankDetail,
-                              branchName,
-                            },
-                          });
-                        }}
-                      />
-                    </View>
+                    <Text>
+                      You've filled the detail, please wait for it's
+                      verification.
+                    </Text>
                   </View>
-                  <View>
-                    <View style={[mainStyles.row, {marginBottom: 20}]}>
-                      <View style={mainStyles.col6}>
-                        <Button
-                          title="Cancel"
-                          titleStyle={{color: variables.mainThemeColor}}
-                          type="outline"
-                          buttonStyle={mainStyles.outlineBtn}
-                          onPress={() => {
+                ) : (
+                  <View
+                    style={{
+                      display: `${
+                        this.state.bankDetailCardDisplay ? 'flex' : 'none'
+                      }`,
+                    }}>
+                    <View>
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="Bank Name"
+                          placeholder="State Bank of India"
+                          value={this.state.bankDetail.name}
+                          onChangeText={name => {
                             this.setState({
-                              bankDetailCardDisplay: false,
                               bankDetail: {
-                                name: '',
-                                accountNumber: '',
-                                ifscCode: '',
-                                branchName: '',
+                                ...this.state.bankDetail,
+                                name,
                               },
                             });
                           }}
                         />
                       </View>
-                      <View style={mainStyles.col6}>
-                        <Button
-                          title="Submit"
-                          titleStyle={{color: variables.mainThemeColor}}
-                          type="outline"
-                          buttonStyle={mainStyles.outlineBtn}
-                          onPress={() => {
-                            this._updateDetail('bankDetail');
+
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="Account Number"
+                          keyboardType="numeric"
+                          placeholder="203XXXXXXX1"
+                          value={this.state.bankDetail.accountNumber}
+                          onChangeText={accountNumber => {
+                            this.setState({
+                              bankDetail: {
+                                ...this.state.bankDetail,
+                                accountNumber,
+                              },
+                            });
                           }}
-                          loading={this.props.profile.profileUpdating}
                         />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="IFSC Code"
+                          placeholder="SBXXXXXXX45"
+                          value={this.state.bankDetail.ifscCode}
+                          onChangeText={ifscCode => {
+                            this.setState({
+                              bankDetail: {
+                                ...this.state.bankDetail,
+                                ifscCode,
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Input
+                          label="Branch Name"
+                          placeholder="XYZ branch"
+                          value={this.state.bankDetail.branchName}
+                          onChangeText={branchName => {
+                            this.setState({
+                              bankDetail: {
+                                ...this.state.bankDetail,
+                                branchName,
+                              },
+                            });
+                          }}
+                        />
+                      </View>
+
+                      <View style={mainStyles.formGroup}>
+                        <Text style={mainStyles.formLabel}>
+                          Enter scanned documents of bank detail in pdf format
+                        </Text>
+                        <View style={mainStyles.row}>
+                          <View style={mainStyles.col6}>
+                            <Button
+                              title="Choose file"
+                              titleStyle={{color: variables.mainThemeColor}}
+                              type="clear"
+                              onPress={this._uploadDocument.bind(
+                                null,
+                                'bankDetail',
+                              )}
+                            />
+                          </View>
+                          <View
+                            style={
+                              (mainStyles.col6, {justifyContent: 'center'})
+                            }>
+                            <Text>
+                              {this.state.bankDetail.document.name ||
+                                'No file choosen'}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                    <View>
+                      <View style={[mainStyles.row, {marginBottom: 20}]}>
+                        <View style={mainStyles.col6}>
+                          <Button
+                            title="Cancel"
+                            titleStyle={{color: variables.mainThemeColor}}
+                            type="outline"
+                            buttonStyle={mainStyles.outlineBtn}
+                            onPress={() => {
+                              this.setState({
+                                bankDetailCardDisplay: false,
+                                name: '',
+                                accountNumber: '',
+                                ifscCode: '',
+                                branchName: '',
+                                document: {
+                                  name: '',
+                                  type: '',
+                                  uri: '',
+                                },
+                              });
+                            }}
+                          />
+                        </View>
+                        <View style={mainStyles.col6}>
+                          <Button
+                            title="Submit"
+                            titleStyle={{color: variables.mainThemeColor}}
+                            type="outline"
+                            buttonStyle={mainStyles.outlineBtn}
+                            onPress={() => {
+                              this._updateDetail('bankDetail');
+                            }}
+                            loading={this.props.profile.profileUpdating}
+                          />
+                        </View>
                       </View>
                     </View>
                   </View>
-                </View>
+                )}
               </Card>
             </View>
           )}
