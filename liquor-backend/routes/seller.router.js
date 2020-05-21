@@ -1,41 +1,43 @@
-const express = require("express");
+const express = require('express');
 
-const middleWares = require("../middlewares/authenticate");
+const authenticate = require('../middlewares/authenticate');
+const fileUpload = require('../middlewares/fileUpload');
 
-const sellerRouterController = require("../controllers/seller.router.controller");
+const sellerRouterController = require('../controllers/seller.router.controller');
 
 const sellerRouter = express.Router(); // initialize express router
 
 sellerRouter
   .get(
-    "/request-phone-otp-register",
+    '/request-phone-otp-register',
     sellerRouterController.requestPhoneOTPForRegister
   )
-  .post("/register", sellerRouterController.register)
+  .post('/register', sellerRouterController.register)
   .get(
-    "/request-phone-otp-login",
+    '/request-phone-otp-login',
     sellerRouterController.requestPhoneOTPForLogin
   )
-  .get("/login", sellerRouterController.login)
-  .get("/logout", middleWares.verifyUserToken, sellerRouterController.logout)
+  .get('/login', sellerRouterController.login)
+  .get('/logout', authenticate.verifyUserToken, sellerRouterController.logout)
   .get(
-    "/get-seller",
-    middleWares.verifyUserToken,
+    '/get-seller',
+    authenticate.verifyUserToken,
     sellerRouterController.getSellerController
   )
   .put(
-    "/update-seller",
-    middleWares.verifyUserToken,
+    '/update-seller',
+    authenticate.verifyUserToken,
+    fileUpload.upload.single('file'),
     sellerRouterController.updateSellerDetailController
   )
   .post(
-    "/add-new-product",
-    middleWares.verifyUserToken,
+    '/add-new-product',
+    authenticate.verifyUserToken,
     sellerRouterController.addNewProductController
   )
   .get(
-    "/get-all-products",
-    middleWares.verifyUserToken,
+    '/get-all-products',
+    authenticate.verifyUserToken,
     sellerRouterController.getAllProductsController
   );
 

@@ -64,7 +64,7 @@ class CheckoutScreen extends Component {
         })
         .then(res => {
           storeDataInAsync(
-            'eSamagri_customer_cart',
+            'eMadhushala_customer_cart',
             JSON.stringify(res.data.updatedCart),
           )
             .then(updatedCart => {

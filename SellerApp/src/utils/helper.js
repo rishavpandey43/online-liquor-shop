@@ -5,6 +5,7 @@ import {
   orderStatus,
   paymentMode,
   verificationDocumentType,
+  verificationStatus,
 } from './constant';
 
 export const storeDataInAsync = async (key, value) => {
@@ -73,6 +74,12 @@ export const getVerificationDocumentName = documentValue => {
       document => document.value === documentValue,
     )[0].name || '-'
   );
+};
+
+export const getVerificationStatus = type => {
+  return verificationStatus.filter(
+    verification => verification.value === type,
+  )[0];
 };
 
 export const getCategoryName = categoryValue => {

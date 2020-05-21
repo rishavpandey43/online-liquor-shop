@@ -32,7 +32,7 @@ export const getProfileFailure = response => {
 export const getProfileFetch = token => dispatch => {
   dispatch(getProfileRequest());
   axios
-    .get(baseUrl + '/deliveryAgent/get-delivery-agent-profile', {
+    .get(baseUrl + '/deliveryAgent/get-deliveryAgent', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${token}`,
@@ -72,22 +72,30 @@ export const updateProfileFailure = response => {
   };
 };
 
-export const updateProfileFetch = (token, data, dataType) => dispatch => {
-  let newData = {
-    data,
-    dataType,
-  };
+export const updateProfileFetch = (
+  token,
+  data,
+  dataType,
+  document,
+) => dispatch => {
+  const newData = new FormData();
+  newData.append('dataType', dataType);
+  newData.append('data', JSON.stringify(data));
+  newData.append('file', {
+    uri: document.uri,
+    type: document.type,
+    name: document.name,
+  });
   dispatch(updateProfileRequest());
   axios
-    .put(baseUrl + '/deliveryAgent/update-delivery-agent-profile', newData, {
+    .put(baseUrl + '/deliveryAgent/update-deliveryAgent', newData, {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     })
     .then(res => {
       dispatch(updateProfileSuccess({profile: {...res.data.deliveryAgent}}));
-      dispatch(getProfileFetch(token));
       ToastAndroid.show(
         'Your details has been updated succesfully, You can go back to your profile',
         ToastAndroid.LONG,

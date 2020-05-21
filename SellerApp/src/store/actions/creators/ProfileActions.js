@@ -72,33 +72,43 @@ export const updateProfileFailure = response => {
   };
 };
 
-export const updateProfileFetch = (token, data, dataType) => dispatch => {
-  let newData = {
-    data,
-    dataType,
-  };
+export const updateProfileFetch = (
+  token,
+  data,
+  dataType,
+  document,
+) => dispatch => {
+  const newData = new FormData();
+  newData.append('dataType', dataType);
+  newData.append('data', JSON.stringify(data));
+  newData.append('file', {
+    uri: document.uri,
+    type: document.type,
+    name: document.name,
+  });
   dispatch(updateProfileRequest());
   axios
     .put(baseUrl + '/seller/update-seller', newData, {
       headers: {
-        'Content-Type': 'application/json',
+        'Content-Type': 'multipart/form-data',
         Authorization: `Bearer ${token}`,
       },
     })
     .then(res => {
-      // dispatch(updateProfileSuccess({profile: {...res.data.seller}}));
+      dispatch(updateProfileSuccess({profile: {...res.data.seller}}));
       ToastAndroid.show(
         'Your details has been updated succesfully, You can go back to your profile',
         ToastAndroid.LONG,
       );
     })
     .catch(err => {
-      // dispatch(
-      //   updateProfileFailure({
-      //     message: err.response
-      //       ? err.response.data.errMessage || 'Internal Server Error'
-      //       : 'Internal Server Error',
-      //   }),
-      // );
+      console.log(err.response);
+      dispatch(
+        updateProfileFailure({
+          message: err.response
+            ? err.response.data.errMessage || 'Internal Server Error'
+            : 'Internal Server Error',
+        }),
+      );
     });
 };

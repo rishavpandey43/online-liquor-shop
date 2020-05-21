@@ -1,36 +1,38 @@
-const express = require("express");
+const express = require('express');
 
-const middleWares = require("../middlewares/authenticate");
+const authenticate = require('../middlewares/authenticate');
+const fileUpload = require('../middlewares/fileUpload');
 
-const deliveryAgentRouterController = require("../controllers/deliveryAgent.router.controller");
+const deliveryAgentRouterController = require('../controllers/deliveryAgent.router.controller');
 
 const deliveryAgentRouter = express.Router(); // initialize express router
 
 deliveryAgentRouter
   .get(
-    "/request-phone-otp-register",
+    '/request-phone-otp-register',
     deliveryAgentRouterController.requestPhoneOTPForRegister
   )
-  .post("/register", deliveryAgentRouterController.register)
+  .post('/register', deliveryAgentRouterController.register)
   .get(
-    "/request-phone-otp-login",
+    '/request-phone-otp-login',
     deliveryAgentRouterController.requestPhoneOTPForLogin
   )
-  .get("/login", deliveryAgentRouterController.login)
+  .get('/login', deliveryAgentRouterController.login)
   .get(
-    "/logout",
-    middleWares.verifyUserToken,
+    '/logout',
+    authenticate.verifyUserToken,
     deliveryAgentRouterController.logout
   )
   .get(
-    "/get-delivery-agent-profile",
-    middleWares.verifyUserToken,
-    deliveryAgentRouterController.getDeliveryAgentProfileController
+    '/get-deliveryAgent',
+    authenticate.verifyUserToken,
+    deliveryAgentRouterController.getDeliveryAgentController
   )
   .put(
-    "/update-delivery-agent-profile",
-    middleWares.verifyUserToken,
-    deliveryAgentRouterController.updateDeliveryAgentProfileController
+    '/update-deliveryAgent',
+    authenticate.verifyUserToken,
+    fileUpload.upload.single('file'),
+    deliveryAgentRouterController.updateDeliveryAgentController
   );
 
 module.exports = deliveryAgentRouter;

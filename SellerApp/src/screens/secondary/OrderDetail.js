@@ -18,7 +18,6 @@ import * as OrderActions from '../../store/actions/creators/OrdersActions';
 import Item from '../../components/OrderItem';
 
 // * Import utilites
-import {baseUrl} from '../../utils/constant';
 import {
   getOrderStatus,
   getpaymentMode,
@@ -196,7 +195,7 @@ class OrderDetailScreen extends Component {
                         fontSize: 18,
                         color: getOrderStatus(this.state.order.status).color,
                       }}>
-                      {getOrderStatus(this.state.order.status).name}
+                      {getOrderStatus(this.state.order.status).label}
                     </Text>
                   </View>
                 </View>

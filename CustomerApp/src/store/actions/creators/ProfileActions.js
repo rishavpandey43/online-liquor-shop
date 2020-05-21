@@ -73,11 +73,22 @@ export const updateProfileFailure = response => {
   };
 };
 
-export const updateProfileFetch = (token, data, dataType) => dispatch => {
-  let newData = {
-    data,
-    dataType,
-  };
+export const updateProfileFetch = (
+  token,
+  data,
+  dataType,
+  document,
+) => dispatch => {
+  const newData = new FormData();
+  newData.append('dataType', dataType);
+  newData.append('data', JSON.stringify(data));
+  if (document) {
+    newData.append('file', {
+      uri: document.uri,
+      type: document.type,
+      name: document.name,
+    });
+  }
   dispatch(updateProfileRequest());
   axios
     .put(baseUrl + '/customer/update-customer', newData, {
@@ -95,6 +106,7 @@ export const updateProfileFetch = (token, data, dataType) => dispatch => {
       dispatch(getSellersFetch(token));
     })
     .catch(err => {
+      console.log(err);
       dispatch(
         updateProfileFailure({
           message: err.response

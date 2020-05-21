@@ -134,17 +134,6 @@ class ProductDetailScreen extends Component {
 
                 <View style={mainStyles.infoGroup}>
                   <View style={mainStyles.labelGroup}>
-                    <Text style={mainStyles.labelText}>Type:</Text>
-                  </View>
-                  <View>
-                    <Text style={mainStyles.value}>
-                      {this.state.product.root.type}
-                    </Text>
-                  </View>
-                </View>
-
-                <View style={mainStyles.infoGroup}>
-                  <View style={mainStyles.labelGroup}>
                     <Text style={mainStyles.labelText}>Variants:</Text>
                   </View>
                   <FlatList

@@ -1,35 +1,37 @@
-const dotenv = require("dotenv");
-const jwt = require("jsonwebtoken");
+const dotenv = require('dotenv');
+const jwt = require('jsonwebtoken');
+const fs = require('fs');
 
 // * configure dotenv to access environment variables
 dotenv.config();
 const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
 
 // * configure and add AUTHY module
-const authy = require("authy")(process.env.TWILIO_PROD_API_KEY);
+const authy = require('authy')(process.env.TWILIO_PROD_API_KEY);
 
-const Customer = require("../models/customer.model");
-const Seller = require("../models/seller.model");
-const Product = require("../models/product.model");
+const Customer = require('../models/customer.model');
+const Seller = require('../models/seller.model');
+const Product = require('../models/product.model');
+const Document = require('../models/document.model');
 
 exports.requestPhoneOTPForRegister = (req, res, next) => {
-  Customer.findOne({ "personalDetail.phone": req.query.phone })
+  Customer.findOne({ 'personalDetail.phone': req.query.phone })
     .then((customer) => {
       if (customer) {
         let err = new Error(`You're already registered.`);
         err.status = 409;
-        err.statusText = "Conflict";
+        err.statusText = 'Conflict';
         next(err);
       } else {
         authy.register_user(
-          "customer@demo.com",
+          'customer@demo.com',
           req.query.phone,
-          "91",
+          '91',
           function (error, response) {
             if (error) {
               let err = new Error(`Internal Server Error`);
               err.status = 500;
-              err.statusText = "Internal Server Error";
+              err.statusText = 'Internal Server Error';
               next(err);
             } else {
               authy.request_sms(response.user.id, (force = true), function (
@@ -39,12 +41,12 @@ exports.requestPhoneOTPForRegister = (req, res, next) => {
                 if (otpError) {
                   let err = new Error(`Internal Server Error`);
                   err.status = 500;
-                  err.statusText = "Internal Server Error";
+                  err.statusText = 'Internal Server Error';
                   next(err);
                 } else {
                   res.statusCode = 200;
-                  res.statusText = "OK";
-                  res.setHeader("Content-Type", "application/json");
+                  res.statusText = 'OK';
+                  res.setHeader('Content-Type', 'application/json');
                   res.json({
                     authyId: response.user.id,
                   });
@@ -59,12 +61,12 @@ exports.requestPhoneOTPForRegister = (req, res, next) => {
 };
 
 exports.register = (req, res, next) => {
-  Customer.findOne({ "personalDetail.phone": req.query.phone })
+  Customer.findOne({ 'personalDetail.phone': req.query.phone })
     .then((customer) => {
       if (customer) {
         let err = new Error(`You're already registered.`);
         err.status = 409;
-        err.statusText = "Conflict";
+        err.statusText = 'Conflict';
         next(err);
       } else {
         authy.verify(req.body.authyId, req.body.otp, function (
@@ -76,7 +78,7 @@ exports.register = (req, res, next) => {
               `OTP you entered was wrong, please enter correct otp to continue`
             );
             err.status = 400;
-            err.statusText = "Bad Request";
+            err.statusText = 'Bad Request';
             next(err);
           } else {
             Customer.create({
@@ -95,11 +97,11 @@ exports.register = (req, res, next) => {
                 let userId = customer._id;
                 // Issue JWT Token on validation
                 const token = jwt.sign({ userId }, JWT_SECRET_KEY, {
-                  expiresIn: "30d",
+                  expiresIn: '30d',
                 });
                 res.statusCode = 200;
-                res.statusText = "OK";
-                res.setHeader("Content-Type", "application/json");
+                res.statusText = 'OK';
+                res.setHeader('Content-Type', 'application/json');
                 res.json({
                   token,
                   message: "You're logged in Successfully",
@@ -114,7 +116,7 @@ exports.register = (req, res, next) => {
 };
 
 exports.requestPhoneOTPForLogin = (req, res, next) => {
-  Customer.findOne({ "personalDetail.phone": req.query.phone })
+  Customer.findOne({ 'personalDetail.phone': req.query.phone })
     .then((customer) => {
       if (customer) {
         authy.request_sms(
@@ -125,14 +127,14 @@ exports.requestPhoneOTPForLogin = (req, res, next) => {
               console.log(otpError);
               let err = new Error(`Internal Server Error`);
               err.status = 500;
-              err.statusText = "Internal Server Error";
+              err.statusText = 'Internal Server Error';
               next(err);
             } else {
               res.statusCode = 200;
-              res.statusText = "OK";
-              res.setHeader("Content-Type", "application/json");
+              res.statusText = 'OK';
+              res.setHeader('Content-Type', 'application/json');
               res.json({
-                message: "OTP sent",
+                message: 'OTP sent',
               });
             }
           }
@@ -140,7 +142,7 @@ exports.requestPhoneOTPForLogin = (req, res, next) => {
       } else {
         let err = new Error(`You're not registered yet.`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
     })
@@ -148,7 +150,7 @@ exports.requestPhoneOTPForLogin = (req, res, next) => {
 };
 
 exports.login = (req, res, next) => {
-  Customer.findOne({ "personalDetail.phone": req.query.phone })
+  Customer.findOne({ 'personalDetail.phone': req.query.phone })
     .then((customer) => {
       if (customer) {
         authy.verify(customer.personalDetail.authyId, req.query.otp, function (
@@ -160,7 +162,7 @@ exports.login = (req, res, next) => {
               `OTP you entered was wrong, please enter correct otp to continue`
             );
             err.status = 400;
-            err.statusText = "Bad Request";
+            err.statusText = 'Bad Request';
             next(err);
           } else {
             // save FCM Device token to DB with on successfull verification
@@ -174,11 +176,11 @@ exports.login = (req, res, next) => {
                 let userId = customer._id;
                 // Issue JWT Token on validation
                 const token = jwt.sign({ userId }, process.env.JWT_SECRET_KEY, {
-                  expiresIn: "30d",
+                  expiresIn: '30d',
                 });
                 res.statusCode = 200;
-                res.statusText = "OK";
-                res.setHeader("Content-Type", "application/json");
+                res.statusText = 'OK';
+                res.setHeader('Content-Type', 'application/json');
                 res.json({
                   token,
                   message: "You're logged in Successfully",
@@ -190,7 +192,7 @@ exports.login = (req, res, next) => {
       } else {
         let err = new Error(`You're not registered yet.`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
     })
@@ -206,17 +208,17 @@ exports.logout = (req, res, next) => {
           .save()
           .then((customer) => {
             res.statusCode = 200;
-            res.statusMessage = "OK";
-            res.setHeader("Content-Type", "application/json");
+            res.statusMessage = 'OK';
+            res.setHeader('Content-Type', 'application/json');
             res.json({
-              message: "Logout successful",
+              message: 'Logout successful',
             });
           })
           .catch((err) => next(err));
       } else {
         let err = new Error(`You're not registered yet.`);
         err.status = 404;
-        err.statusText = "Not Found";
+        err.statusText = 'Not Found';
         next(err);
       }
     })
@@ -228,15 +230,15 @@ exports.getCustomerController = (req, res, next) => {
     .then((customer) => {
       if (customer) {
         res.statusCode = 200;
-        res.statusMessage = "OK";
-        res.setHeader("Content-Type", "application/json");
+        res.statusMessage = 'OK';
+        res.setHeader('Content-Type', 'application/json');
         res.json({
           customer,
         });
       } else {
         let err = new Error(`Internal Server Error`);
         err.status = 500;
-        err.statusText = "Internal Server Error";
+        err.statusText = 'Internal Server Error';
         next(err);
       }
     })
@@ -247,29 +249,28 @@ exports.getCustomerController = (req, res, next) => {
 exports.getAllSellersController = (req, res, next) => {
   Customer.findOne({ _id: req.userId })
     .then((customer) => {
-      let customerState = customer.address.pincode.toString()[0];
       Seller.find({
         $and: [
           {
-            "storeDetail.address.pincode": {
-              $gt: customerState * 100000,
-              $lt: (customerState + 1) * 100000,
-            },
+            'storeDetail.address.pincode': customer.address.pincode,
           },
           {
-            "storeDetail.verified": true,
+            'profileVerificationDetail.verification': 'ver',
           },
           {
-            "bankDetail.verified": true,
+            'storeDetail.verification': 'ver',
+          },
+          {
+            'bankDetail.verification': 'ver',
           },
         ],
       })
-        .sort({ "storeDetail.address.pincode": 1 })
-        .populate([{ path: "products.root", model: Product }])
+        .sort({ 'storeDetail.address.pincode': 1 })
+        .populate([{ path: 'products.root', model: Product }])
         .then((sellers) => {
           res.statusCode = 200;
-          res.statusMessage = "OK";
-          res.setHeader("Content-Type", "application/json");
+          res.statusMessage = 'OK';
+          res.setHeader('Content-Type', 'application/json');
           res.json({
             sellers,
           });
@@ -280,27 +281,76 @@ exports.getAllSellersController = (req, res, next) => {
 };
 
 exports.updateCustomerDetailController = (req, res, next) => {
-  Customer.findOneAndUpdate(
-    { _id: req.userId },
-    { $set: { [req.body.dataType]: req.body.data } },
-    { new: true }
-  )
-    .then((customer) => {
-      if (customer) {
-        res.statusCode = 200;
-        res.statusMessage = "OK";
-        res.setHeader("Content-Type", "application/json");
-        res.json({
-          customer,
-        });
-      } else {
-        let err = new Error(`Unable to update, please try again.`);
-        err.status = 501;
-        err.statusText = "Not Implemented";
-        next(err);
-      }
+  if (req.file) {
+    Document.create({
+      id: req.userId,
+      document: {
+        name: req.file.originalname,
+        data: {
+          buffer: new Buffer(
+            fs.readFileSync(req.file.path).toString('base64'),
+            'base64'
+          ),
+          contentType: req.file.mimetype,
+        },
+      },
     })
-    .catch((err) => next(err));
+      .then((document) => {
+        let updatedData = {
+          ...JSON.parse(req.body.data),
+          documentId: document._id,
+        };
+        // ! Now Delete the file stored in local disk Storage.
+        fs.unlink(req.file.path, (err) => {
+          if (err) next(err);
+          Customer.findOneAndUpdate(
+            { _id: req.userId },
+            { $set: { [req.body.dataType]: updatedData } },
+            { new: true }
+          )
+            .then((customer) => {
+              if (customer) {
+                res.statusCode = 200;
+                res.statusMessage = 'OK';
+                res.setHeader('Content-Type', 'application/json');
+                res.json({
+                  customer,
+                });
+              } else {
+                let err = new Error(`Unable to update, please try again.`);
+                err.status = 501;
+                err.statusText = 'Not Implemented';
+              }
+            })
+            .catch((err) => next(err));
+        });
+      })
+      .catch((err) => next(err));
+  } else {
+    let updatedData = {
+      ...JSON.parse(req.body.data),
+    };
+    Customer.findOneAndUpdate(
+      { _id: req.userId },
+      { $set: { [req.body.dataType]: updatedData } },
+      { new: true }
+    )
+      .then((customer) => {
+        if (customer) {
+          res.statusCode = 200;
+          res.statusMessage = 'OK';
+          res.setHeader('Content-Type', 'application/json');
+          res.json({
+            customer,
+          });
+        } else {
+          let err = new Error(`Unable to update, please try again.`);
+          err.status = 501;
+          err.statusText = 'Not Implemented';
+        }
+      })
+      .catch((err) => next(err));
+  }
 };
 
 exports.getCartController = (req, res, next) => {
@@ -308,15 +358,15 @@ exports.getCartController = (req, res, next) => {
     .then((customer) => {
       if (customer) {
         res.statusCode = 200;
-        res.statusMessage = "OK";
-        res.setHeader("Content-Type", "application/json");
+        res.statusMessage = 'OK';
+        res.setHeader('Content-Type', 'application/json');
         res.json({
           cart: customer.cart,
         });
       } else {
         let err = new Error(`Internal Server Error`);
         err.status = 500;
-        err.statusText = "Internal Server Error";
+        err.statusText = 'Internal Server Error';
         next(err);
       }
     })
@@ -328,8 +378,9 @@ exports.updateCartController = (req, res, next) => {
     .then((customer) => {
       if (customer) {
         let cartProducts = req.body.products;
+        console.log(cartProducts);
         Seller.findById(req.body.storeId)
-          .populate([{ path: "products.root", model: Product }])
+          .populate([{ path: 'products.root', model: Product }])
           .then((seller) => {
             // * Find all the products of store in the cart, to retrieve all detail
             let storeProducts = [...seller.products];
@@ -362,8 +413,8 @@ exports.updateCartController = (req, res, next) => {
               .save()
               .then((customer) => {
                 res.statusCode = 200;
-                res.statusMessage = "OK";
-                res.setHeader("Content-Type", "application/json");
+                res.statusMessage = 'OK';
+                res.setHeader('Content-Type', 'application/json');
                 res.json({
                   newCart: customer.cart,
                 });
@@ -374,7 +425,7 @@ exports.updateCartController = (req, res, next) => {
       } else {
         let err = new Error(`Unable to update, please try again.`);
         err.status = 501;
-        err.statusText = "Not Implemented";
+        err.statusText = 'Not Implemented';
         next(err);
       }
     })
