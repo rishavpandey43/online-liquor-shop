@@ -228,6 +228,7 @@ class HomeScreen extends Component {
             />
           }>
           {this.props.profile.profile &&
+          this.props.profile.profile.profileVerificationDetail &&
           this.props.profile.profile.profileVerificationDetail.verification !=
             'ver' ? (
             <Card title="Alert" containerStyle={{alignItems: 'center'}}>

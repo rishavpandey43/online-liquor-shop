@@ -82,7 +82,7 @@ class HelpScreen extends Component {
                 }}
               />
               <ListItem
-                title="About E Samagri"
+                title="About E Madhushala"
                 leftAvatar={
                   <Icon
                     type="font-awesome"
@@ -142,13 +142,13 @@ class HelpScreen extends Component {
             </View>
             <View>
               <Text style={{padding: 10}}>
-                Want some grocery but don't feel like stepping out of the house?
-                Budget is on your mind and before buying, need to compare prices
-                from shops around you? Here we are to keep all your worries at
-                bay! Through this app, we aim to bring ease and comfort at your
-                disposal by provisioning all types of groceries just with a few
-                clicks. A few selections and all the required grocery items in
-                your list are at your doorstep!
+                Want some booze and this lockdown has kept you from stepping out
+                of the house? Budget is on your mind and before buying, need to
+                compare prices from shops around you? Here we are to keep all
+                your worries at bay! Through this app, we aim to bring ease and
+                comfort at your disposal by provisioning various alcohol brands
+                just with a few clicks. A few selections and brands in your wish
+                list are at your doorstep!
               </Text>
             </View>
           </View>
